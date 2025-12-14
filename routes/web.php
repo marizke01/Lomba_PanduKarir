@@ -112,8 +112,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/certificates/{certificate}/download', [CertificateController::class, 'download'])
         ->name('certificates.download');
 
-    Route::get('/certificates/{id}/download', [CertificateController::class, 'download'])
-        ->name('certificates.download');
+    // Route::get('/certificates/{id}/download', [CertificateController::class, 'download'])
+    //     ->name('certificates.download');
 });
 
 
