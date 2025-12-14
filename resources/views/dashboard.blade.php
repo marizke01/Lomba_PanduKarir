@@ -95,13 +95,45 @@
                             </div>
                         </div>
                         <span class="text-[11px] px-2 py-1 rounded-full bg-emerald-50 text-emerald-700">
-                            Segera tersedia
+                            Mulai
                         </span>
                     </div>
                     <p class="text-xs text-slate-500">
                         Di sini nanti adalah jumlah proyek simulasi (mirip freelance) yang sudah kamu kerjakan.
                     </p>
                 </div>
+
+
+                {{-- Portfolio --}}
+                <div class="bg-white/90 backdrop-blur border border-slate-200 rounded-2xl shadow-sm p-4 flex flex-col gap-2">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <div class="h-9 w-9 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center">
+                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none">
+                                    <path d="M4 4h16v16H4z" stroke="currentColor" stroke-width="1.6"/>
+                                    <path d="M8 8h8v8H8z" stroke="currentColor" stroke-width="1.6"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-500">Portofolio</p>
+                                <p class="text-2xl font-semibold text-slate-900">
+                                    {{ $portfolioCount ?? 0 }}
+                                </p>
+                            </div>
+                        </div>
+                        @auth
+                        <a href="{{ route('portfolio.index') }}"
+                        class="text-[11px] px-2 py-1 rounded-full bg-sky-50 text-sky-700">
+                            Lihat
+                        </a>
+                        @endauth
+                    </div>
+                    <p class="text-xs text-slate-500">
+                        Project Lab yang sudah selesai otomatis masuk ke portofoliomu.
+                    </p>
+                </div>
+
+
 
                 {{-- Sertifikat --}}
                 <div class="bg-white/90 backdrop-blur border border-slate-200 rounded-2xl shadow-sm p-4 flex flex-col gap-2">
@@ -237,30 +269,39 @@
                                 </div>
                                 <span class="text-xs text-slate-400">Mulai</span>
                             </a>
-                            <a href="#"
+                            <a href="{{ route('projectlab.index') }}"
                                class="flex items-center justify-between px-3 py-2 rounded-xl border border-slate-100 hover:bg-slate-50">
                                 <div>
                                     <p class="font-medium text-slate-800">Project Lab</p>
                                     <p class="text-[11px] text-slate-500">Proyek simulasi seperti freelance</p>
                                 </div>
-                                <span class="text-xs text-slate-400">Segera</span>
+                                <span class="text-xs text-slate-400">Mulai</span>
                             </a>
-                            <a href="#"
+                            <a href="{{ route('portfolio.index') }}"
                                class="flex items-center justify-between px-3 py-2 rounded-xl border border-slate-100 hover:bg-slate-50">
                                 <div>
                                     <p class="font-medium text-slate-800">Portofolio</p>
                                     <p class="text-[11px] text-slate-500">Kumpulkan hasil karyamu</p>
                                 </div>
-                                <span class="text-xs text-slate-400">Segera</span>
+                                <span class="text-xs text-slate-400">Lihat</span>
                             </a>
-                            <a href="#"
+                            <a href="{{ route('certificates.index') }}"
                                class="flex items-center justify-between px-3 py-2 rounded-xl border border-slate-100 hover:bg-slate-50">
                                 <div>
                                     <p class="font-medium text-slate-800">Sertifikat</p>
                                     <p class="text-[11px] text-slate-500">Download sertifikat digital</p>
                                 </div>
-                                <span class="text-xs text-slate-400">Segera</span>
+                                <span class="text-xs text-slate-400">Lihat</span>
                             </a>
+                            <a href="{{ route('cv.index') }}"
+                            class="flex items-center justify-between px-3 py-2 rounded-xl border border-slate-100 hover:bg-slate-50">
+                                <div>
+                                    <p class="font-medium text-slate-800">CV Builder</p>
+                                    <p class="text-[11px] text-slate-500">Buat CV profesional</p>
+                                </div>
+                                <span class="text-xs text-slate-400">Baru</span>
+                            </a>
+
                         </div>
                     </div>
 

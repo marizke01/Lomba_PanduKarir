@@ -1,4 +1,3 @@
-{{-- resources/views/skills/show.blade.php --}}
 <x-app-layout>
     <x-slot name="header">
         <div class="flex flex-col gap-1">
@@ -12,110 +11,308 @@
                 <span class="px-2 py-0.5 rounded-full bg-slate-100">
                     {{ $course['category'] }}
                 </span>
-                <span class="px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700">
+                <span class="px-2 py-0.5 rounded-full bg-violet-50 text-violet-700">
                     Level: {{ $course['level'] }}
                 </span>
                 <span class="px-2 py-0.5 rounded-full bg-slate-100">
-                    {{ $course['duration'] }}
+                    {{ $course['video_count'] ?? collect($course['modules'] ?? [])->where('type', 'video')->count() }} video · {{ $course['duration'] ?? '—' }}
                 </span>
+
+
             </div>
         </div>
     </x-slot>
 
-    <div class="py-6 sm:py-8 bg-slate-50 min-h-screen">
-        <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
+    @php
+        // Extra bullet per pelatihan teknologi
+        $extraSections = [
+            'web-development-dasar' => [
+                [
+                    'title' => 'Yang akan kamu pelajari',
+                    'items' => [
+                        'Struktur dasar HTML untuk membangun halaman.',
+                        'Mengatur tampilan dengan CSS (warna, font, layout).',
+                        'Membuat halaman yang rapi dan responsif.',
+                    ],
+                ],
+                [
+                    'title' => 'Cocok untuk siapa?',
+                    'items' => [
+                        'Siswa SMA/SMK yang baru mulai belajar web.',
+                        'Kamu yang ingin punya landasan kuat sebelum ke JavaScript atau Laravel.',
+                    ],
+                ],
+                [
+                    'title' => 'Setelah selesai, kamu bisa…',
+                    'items' => [
+                        'Membuat landing page sederhana sendiri.',
+                        'Membaca dan mengedit kode HTML & CSS dengan percaya diri.',
+                    ],
+                ],
+            ],
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {{-- KIRI: VIDEO + DESKRIPSI --}}
+            'javascript-dasar' => [
+                [
+                    'title' => 'Yang akan kamu pelajari',
+                    'items' => [
+                        'Dasar sintaks JavaScript di browser.',
+                        'Variabel, tipe data, dan fungsi.',
+                        'Event & manipulasi DOM.',
+                    ],
+                ],
+                [
+                    'title' => 'Cocok untuk siapa?',
+                    'items' => [
+                        'Siswa SMA/SMK yang baru mulai ngoding.',
+                        'Kamu yang sudah paham HTML & CSS dasar.',
+                        'Yang pengin bikin website lebih interaktif.',
+                    ],
+                ],
+                [
+                    'title' => 'Setelah selesai, kamu bisa…',
+                    'items' => [
+                        'Memahami cara kerja JS di browser.',
+                        'Membuat interaksi sederhana (tombol, form, dll).',
+                        'Membangun mini project seperti To-Do List untuk portofolio.',
+                    ],
+                ],
+            ],
+
+            'mysql-dasar' => [
+                [
+                    'title' => 'Yang akan kamu pelajari',
+                    'items' => [
+                        'Konsep dasar database relasional.',
+                        'Membuat database & tabel di MySQL.',
+                        'Query SELECT, INSERT, UPDATE, dan DELETE.',
+                    ],
+                ],
+                [
+                    'title' => 'Cocok untuk siapa?',
+                    'items' => [
+                        'Siswa SMK RPL / TKJ yang ingin paham backend.',
+                        'Kamu yang ingin lanjut ke Laravel / backend web.',
+                    ],
+                ],
+                [
+                    'title' => 'Setelah selesai, kamu bisa…',
+                    'items' => [
+                        'Mendesain tabel sederhana untuk aplikasi.',
+                        'Membaca dan menulis query SQL dasar.',
+                    ],
+                ],
+            ],
+
+            'laravel-web-development-pemula' => [
+                [
+                    'title' => 'Yang akan kamu pelajari',
+                    'items' => [
+                        'Struktur folder & arsitektur dasar Laravel (MVC).',
+                        'Routing, controller, dan Blade template untuk tampilan.',
+                        'Migration & Eloquent model untuk mengelola database.',
+                        'Membuat fitur CRUD sederhana (Create, Read, Update, Delete).',
+                    ],
+                ],
+                [
+                    'title' => 'Cocok untuk siapa?',
+                    'items' => [
+                        'Siswa SMK/SMA yang sudah mengenal PHP dasar.',
+                        'Mahasiswa atau pemula yang ingin pindah dari PHP native ke framework.',
+                        'Kamu yang ingin membangun aplikasi web modern dengan cara yang lebih rapi dan terstruktur.',
+                    ],
+                ],
+                [
+                    'title' => 'Setelah selesai, kamu bisa…',
+                    'items' => [
+                        'Membuat aplikasi web sederhana berbasis Laravel (misalnya To-Do App atau Blog).',
+                        'Memahami alur request–response & konsep MVC di Laravel.',
+                        'Mengembangkan fitur baru dengan percaya diri menggunakan route, controller, dan view.',
+                    ],
+                ],
+            ],
+            
+        ];
+
+        $sectionsForThisCourse = $extraSections[$course['slug']] ?? null;
+    @endphp
+
+    <div class="py-6 sm:py-8 bg-slate-50 min-h-screen">
+        <div class="max-w-6xl mx-auto sm:px-6 lg:px-8 space-y-6">
+
+            {{-- PROGRESS --}}
+            <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-5 space-y-3">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-semibold text-slate-900">
+                            Progress pelatihan
+                        </p>
+                        <p class="text-[11px] text-slate-500">
+                            {{ $completedModules }} dari {{ $totalModules }} modul selesai
+                        </p>
+                    </div>
+                    <p class="text-sm font-semibold text-violet-700">
+                        {{ $progressPercent }}%
+                    </p>
+                </div>
+                <div class="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
+                    <div class="h-full bg-violet-500 rounded-full" style="width: {{ $progressPercent }}%;"></div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                {{-- KIRI: deskripsi + modul --}}
                 <div class="lg:col-span-2 space-y-4">
+
+                    {{-- TENTANG PELATIHAN --}}
                     <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
-                        <div class="aspect-video bg-black">
-                            <iframe
-                                class="w-full h-full"
-                                src="{{ $course['intro_video_url'] }}"
-                                title="Video pelatihan {{ $course['title'] }}"
-                                frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                allowfullscreen
-                            ></iframe>
-                        </div>
-                        <div class="p-4">
-                            <h3 class="text-sm font-semibold text-slate-900 mb-1">
-                                Intro Pelatihan
+                        {{-- Foto / thumbnail --}}
+                        {{-- Thumbnail pelatihan (tanpa cropping, tapi tetap rapi) --}}
+                       @php
+                            $thumb = $course['thumbnail'] ?? '';
+                            $thumbFallback = $thumb ? str_replace('maxresdefault','hqdefault',$thumb) : 'https://placehold.co/1200x600?text=SkillBridge';
+                        @endphp
+
+                        <img
+                            src="{{ $thumb ?: $thumbFallback }}"
+                            onerror="this.onerror=null;this.src='{{ $thumbFallback }}';"
+                            alt="Thumbnail pelatihan {{ $course['title'] }}"
+                            class="w-full h-full object-contain"
+                        />
+
+
+                        <div class="p-5 space-y-3">
+                            <h3 class="text-sm font-semibold text-slate-900">
+                                Tentang pelatihan ini
                             </h3>
+
                             <p class="text-xs text-slate-600">
-                                Tonton video ini sebagai pengantar sebelum masuk ke modul-modul berikutnya.
-                                Di versi lengkap aplikasi, setiap modul akan punya videonya sendiri dan progress belajarmu akan disimpan.
+                                {{ $course['description'] }}
+                            </p>
+
+                            {{-- Grid bullet kalau ada --}}
+                            @if ($sectionsForThisCourse)
+                                <div class="grid sm:grid-cols-3 gap-3 text-[11px] text-slate-600 mt-2">
+                                    @foreach ($sectionsForThisCourse as $section)
+                                        <div class="space-y-1">
+                                            <p class="font-semibold text-slate-900">
+                                                {{ $section['title'] }}
+                                            </p>
+                                            <ul class="list-disc list-inside space-y-0.5">
+                                                @foreach ($section['items'] as $item)
+                                                    <li>{{ $item }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    {{-- DAFTAR MODUL --}}
+                    <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-5">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-sm font-semibold text-slate-900">
+                                Daftar modul
+                            </h3>
+                            <p class="text-[11px] text-slate-500">
+                                Klik modul untuk mulai belajar.
                             </p>
                         </div>
-                    </div>
-
-                    <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-4">
-                        <h3 class="text-sm font-semibold text-slate-900 mb-2">
-                            Tentang pelatihan ini
-                        </h3>
-                        <p class="text-xs text-slate-600">
-                            {{ $course['short_description'] }}
-                        </p>
-                        <p class="text-xs text-slate-500 mt-2">
-                            Di MVP ini, pelatihan masih berupa video statis. Nanti bisa dikembangkan jadi sistem modul dengan progress tracking,
-                            kuis, dan tugas kecil di tiap modul.
-                        </p>
-                    </div>
-                </div>
-
-                {{-- KANAN: LIST MODUL --}}
-                <div class="space-y-4">
-                    <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-4">
-                        <h3 class="text-sm font-semibold text-slate-900 mb-2">
-                            Daftar modul
-                        </h3>
-                        <p class="text-xs text-slate-500 mb-3">
-                            Modul-modul yang akan kamu pelajari dalam pelatihan ini.
-                        </p>
 
                         <div class="space-y-2">
                             @foreach ($course['modules'] as $index => $module)
-                                <div class="flex items-center gap-3 px-3 py-2 rounded-xl border border-slate-100 bg-slate-50/60">
-                                    <div class="h-7 w-7 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-[11px] font-semibold">
-                                        {{ $index + 1 }}
-                                    </div>
-                                    <div class="flex-1">
-                                        <p class="text-xs font-medium text-slate-900">
-                                            {{ $module['title'] }}
-                                        </p>
-                                        <p class="text-[11px] text-slate-500">
-                                            {{ $module['duration'] }}
-                                        </p>
-                                    </div>
-                                    @if ($index === 0)
-                                        <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700">
-                                            Intro
+                                @php
+                                    $prevCompleted = $index === 0
+                                        ? true
+                                        : optional($progressByModule[$index - 1] ?? null)->is_completed;
+
+                                    $thisCompleted = optional($progressByModule[$index] ?? null)->is_completed;
+
+                                    $isLocked = ! $prevCompleted;
+                                @endphp
+
+                                @if ($isLocked)
+                                    {{-- Modul terkunci --}}
+                                    <div class="flex items-start justify-between gap-3 px-3 py-2 rounded-xl bg-slate-50 border border-dashed border-slate-200 opacity-70">
+                                        <div class="flex items-start gap-3">
+                                            <div class="mt-1 h-6 w-6 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-[11px]">
+                                                {{ $index + 1 }}
+                                            </div>
+                                            <div>
+                                                <p class="text-xs font-semibold text-slate-500">
+                                                    {{ $module['title'] }}
+                                                </p>
+                                                <p class="text-[11px] text-slate-400">
+                                                    Terkunci · Selesaikan modul sebelumnya dulu
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <span class="text-[11px] text-slate-400">
+                                            🔒
                                         </span>
-                                    @endif
-                                </div>
+                                    </div>
+                                @else
+                                    {{-- Modul bisa diklik --}}
+                                    <a href="{{ route('skills.module', [$course['slug'], $index]) }}"
+                                    class="flex items-start justify-between gap-3 px-3 py-3 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-100 transition">
+                                        <div class="flex items-start gap-3">
+                                            <div class="mt-1 h-6 w-6 rounded-full {{ $thisCompleted ? 'bg-emerald-100 text-emerald-700' : 'bg-violet-100 text-violet-700' }} flex items-center justify-center text-[11px]">
+                                                {{ $index + 1 }}
+                                            </div>
+                                            <div>
+                                                <p class="text-xs font-semibold text-slate-900">
+                                                    {{ $module['title'] }}
+                                                </p>
+                                                <p class="text-[11px] text-slate-500">
+                                                    {{ ucfirst($module['type']) }} · {{ $module['duration'] }}
+                                                </p>
+                                                @if ($thisCompleted)
+                                                    <p class="text-[11px] text-emerald-600">
+                                                        ✅ Modul ini sudah kamu tandai selesai.
+                                                    </p>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <span class="text-[11px] {{ $thisCompleted ? 'text-emerald-600' : 'text-violet-600' }}">
+                                            {{ $thisCompleted ? 'Selesai' : 'Buka modul →' }}
+                                        </span>
+                                    </a>
+                                @endif
                             @endforeach
+
                         </div>
                     </div>
+                </div>
 
-                    <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-4">
+                {{-- KANAN: aksi cepat + tips --}}
+                <div class="space-y-4">
+                    <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-5">
                         <h3 class="text-sm font-semibold text-slate-900 mb-2">
-                            Langkah berikutnya
+                            Mulai / lanjut belajar
                         </h3>
                         <p class="text-xs text-slate-600 mb-3">
-                            Setelah menyelesaikan semua modul, kamu bisa:
+                            Disarankan mulai dari modul pertama, lalu lanjutkan urut sampai project mini di akhir.
                         </p>
-                        <ul class="list-disc list-inside text-xs text-slate-600 space-y-1">
-                            <li>Ambil Project Lab yang sesuai dengan pelatihan ini.</li>
-                            <li>Menambahkan hasil project ke portofolio.</li>
-                            <li>Mengaktifkan sertifikat penyelesaian pelatihan + project.</li>
-                        </ul>
-                        <button
-                            class="mt-3 inline-flex items-center px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-medium hover:bg-indigo-700 w-full justify-center">
-                            (Demo) Tandai pelatihan ini sebagai selesai
-                        </button>
+                        <form method="POST" action="{{ route('skills.start', $course['slug']) }}">
+                            @csrf
+                            <button
+                                class="w-full inline-flex items-center justify-center px-4 py-2 rounded-xl bg-violet-600 text-white text-xs font-medium hover:bg-violet-700">
+                                Mulai / lanjut pelatihan
+                            </button>
+                        </form>
                     </div>
 
+                    <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-5">
+                        <h3 class="text-sm font-semibold text-slate-900 mb-2">
+                            Tips belajar efektif
+                        </h3>
+                        <ul class="list-disc list-inside text-[11px] text-slate-600 space-y-1">
+                            <li>Catat poin penting di buku atau note digital.</li>
+                            <li>Pause video untuk mencoba sendiri di VS Code / editor.</li>
+                            <li>Simpen semua hasil project untuk portofolio.</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 
