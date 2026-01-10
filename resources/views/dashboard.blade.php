@@ -11,7 +11,7 @@
         </div>
     </x-slot>
 
-    <div class="py-8 bg-gradient-to-b from-slate-50 to-slate-100 min-h-screen">
+    <div class="py-8 bg-gradient-to-b from-slate-50 to-slate-100">
         <div class="max-w-6xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
             {{-- HERO CARD --}}
