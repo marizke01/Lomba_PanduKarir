@@ -12,7 +12,8 @@ use App\Http\Controllers\{
     ProjectLabController,
     ProjectAssignmentController,
     PortfolioController,
-    CertificateController
+    CertificateController,
+    DashboardController
 };
 
 use App\Models\{
@@ -38,29 +39,11 @@ Route::middleware(['auth'])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | DASHBOARD (PAKAI LOGIC TEMANMU)
+    | DASHBOARD (DIPINDAH KE CONTROLLER)
     |--------------------------------------------------------------------------
     */
-    Route::get('/dashboard', function () {
-        $user = Auth::user();
-
-        $totalCourses = CourseProgress::where('user_id', $user->id)->count();
-        $completedCourses = CourseProgress::where('user_id', $user->id)
-            ->where('status', 'completed')
-            ->count();
-
-        $totalProjects = ProjectAssignment::where('user_id', $user->id)->count();
-        $submittedProjects = ProjectAssignment::where('user_id', $user->id)
-            ->where('status', 'submitted')
-            ->count();
-
-        return view('dashboard', compact(
-            'totalCourses',
-            'completedCourses',
-            'totalProjects',
-            'submittedProjects'
-        ));
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->name('dashboard');
 
     /*
     |--------------------------------------------------------------------------
@@ -73,7 +56,7 @@ Route::middleware(['auth'])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | CV BUILDER (KODE KAMU)
+    | CV BUILDER
     |--------------------------------------------------------------------------
     */
     Route::get('/cv', [CVController::class, 'index'])->name('cv.index');
@@ -82,7 +65,7 @@ Route::middleware(['auth'])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | SKILLS (GABUNG)
+    | SKILLS
     |--------------------------------------------------------------------------
     */
     Route::prefix('skills')->name('skills.')->group(function () {
@@ -100,9 +83,11 @@ Route::middleware(['auth'])->group(function () {
             ->name('module.complete');
     });
 
-
-    // routes/web.php
-Route::middleware(['auth'])->group(function () {
+    /*
+    |--------------------------------------------------------------------------
+    | CERTIFICATES (HAPUS AUTH GROUP DOBEL)
+    |--------------------------------------------------------------------------
+    */
     Route::get('/certificates', [CertificateController::class, 'index'])
         ->name('certificates.index');
 
@@ -112,14 +97,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/certificates/{certificate}/download', [CertificateController::class, 'download'])
         ->name('certificates.download');
 
-    // Route::get('/certificates/{id}/download', [CertificateController::class, 'download'])
-    //     ->name('certificates.download');
-});
-
-
     /*
     |--------------------------------------------------------------------------
-    | PROJECT LAB (INI YANG KAMU BUTUH)
+    | PROJECT LAB
     |--------------------------------------------------------------------------
     */
     Route::get('/project-lab', [ProjectLabController::class, 'index'])
@@ -134,12 +114,16 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/project-lab/{slug}/submit', [ProjectAssignmentController::class, 'submit'])
         ->name('projectlab.submit');
 
+    /*
+    |--------------------------------------------------------------------------
+    | PORTFOLIO
+    |--------------------------------------------------------------------------
+    */
     Route::get('/portfolio', [PortfolioController::class, 'index'])
         ->name('portfolio.index');
 
     Route::get('/portfolio/{id}', [PortfolioController::class, 'show'])
         ->name('portfolio.show');
-
 });
 
 /*
