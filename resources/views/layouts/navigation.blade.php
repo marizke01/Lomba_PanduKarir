@@ -11,10 +11,31 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
 
-            <!-- LEFT: Logo + Links -->
-            <div class="flex items-center">
+            <!-- LEFT: BACK (conditional) + LOGO -->
+            <div class="flex items-center gap-2">
 
-                <!-- Logo -->
+                {{-- BACK BUTTON (HANYA MUNCUL SELAIN DASHBOARD) --}}
+                @if (!request()->routeIs('dashboard'))
+                    <button
+                        onclick="window.history.back()"
+                        class="inline-flex items-center justify-center
+                               h-9 w-9 rounded-xl
+                               bg-white/10 hover:bg-white/20
+                               text-white transition"
+                        title="Kembali">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             class="h-5 w-5"
+                             fill="none"
+                             viewBox="0 0 24 24"
+                             stroke="currentColor"
+                             stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
+                @endif
+
+                {{-- LOGO --}}
                 <a href="{{ route('dashboard') }}"
                    class="flex items-center gap-2 font-semibold tracking-wide">
                     <span class="inline-flex h-9 w-9 items-center justify-center
@@ -26,52 +47,81 @@
                         SkillBridge
                     </span>
                 </a>
-
-                <!-- Navigation Links -->
-                <div class="hidden sm:flex space-x-8 sm:ms-10">
-                    <x-nav-link
-                        :href="route('dashboard')"
-                        :active="request()->routeIs('dashboard')"
-                        class="text-white hover:text-indigo-100">
-                        Dashboard
-                    </x-nav-link>
-                </div>
             </div>
 
-            <!-- RIGHT: User Dropdown -->
+            <!-- RIGHT: DASHBOARD MENU + USER -->
             @auth
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <x-dropdown align="right" width="48">
+            <div class="hidden sm:flex sm:items-center sm:ms-6 gap-3">
+
+                {{-- DASHBOARD MENU DROPDOWN --}}
+                <x-dropdown align="right" width="56">
                     <x-slot name="trigger">
                         <button
                             class="inline-flex items-center gap-2 px-3 py-2
                                    rounded-xl text-sm font-medium
                                    text-white bg-white/10 hover:bg-white/20
-                                   focus:outline-none transition">
-                            <span>{{ Auth::user()->name }}</span>
+                                   transition">
+                            <span>Fitur</span>
                             <svg class="h-4 w-4 fill-current" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd"
-                                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                      clip-rule="evenodd"/>
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd"/>
                             </svg>
                         </button>
                     </x-slot>
 
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
-                            Profile
+                        <x-dropdown-link :href="route('skills.index')">
+                            Belajar Skill
                         </x-dropdown-link>
-
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <x-dropdown-link
-                                :href="route('logout')"
-                                onclick="event.preventDefault(); this.closest('form').submit();">
-                                Log Out
-                            </x-dropdown-link>
-                        </form>
+                        <x-dropdown-link :href="route('projectlab.index')">
+                            Project Lab
+                        </x-dropdown-link>
+                        <x-dropdown-link :href="route('portfolio.index')">
+                            Portofolio
+                        </x-dropdown-link>
+                        <x-dropdown-link :href="route('certificates.index')">
+                            Sertifikat
+                        </x-dropdown-link>
+                        <x-dropdown-link :href="route('cv.index')">
+                            CV Builder
+                        </x-dropdown-link>
                     </x-slot>
                 </x-dropdown>
+
+               {{-- USER DROPDOWN --}}
+            <x-dropdown align="right" width="48">
+                <x-slot name="trigger">
+                    <button
+                        class="inline-flex items-center gap-2 px-3 py-2
+                            rounded-xl text-sm font-medium
+                            text-white bg-white/10 hover:bg-white/20
+                            transition">
+                        <span>{{ Auth::user()->name }}</span>
+                        <svg class="h-4 w-4 fill-current" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clip-rule="evenodd"/>
+                        </svg>
+                    </button>
+                </x-slot>
+
+                <x-slot name="content">
+                    <x-dropdown-link :href="route('profile.edit')">
+                        Profile
+                    </x-dropdown-link>
+
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <x-dropdown-link
+                            :href="route('logout')"
+                            onclick="event.preventDefault(); this.closest('form').submit();">
+                            Log Out
+                        </x-dropdown-link>
+                    </form>
+                </x-slot>
+            </x-dropdown>
+
             </div>
             @endauth
 
@@ -89,42 +139,7 @@
                     </svg>
                 </button>
             </div>
+
         </div>
-    </div>
-
-    <!-- Mobile Menu -->
-    <div x-show="open" x-transition
-         class="sm:hidden bg-gradient-to-r from-indigo-600/90 to-sky-500/90 backdrop-blur-md">
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link
-                :href="route('dashboard')"
-                :active="request()->routeIs('dashboard')">
-                Dashboard
-            </x-responsive-nav-link>
-        </div>
-
-        @auth
-        <div class="border-t border-white/20 pt-4 pb-2">
-            <div class="px-4 text-white">
-                <div class="font-medium">{{ Auth::user()->name }}</div>
-                <div class="text-sm opacity-80">{{ Auth::user()->email }}</div>
-            </div>
-
-            <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
-                    Profile
-                </x-responsive-nav-link>
-
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <x-responsive-nav-link
-                        :href="route('logout')"
-                        onclick="event.preventDefault(); this.closest('form').submit();">
-                        Log Out
-                    </x-responsive-nav-link>
-                </form>
-            </div>
-        </div>
-        @endauth
     </div>
 </nav>

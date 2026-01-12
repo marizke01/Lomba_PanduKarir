@@ -16,7 +16,13 @@
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
+            {{-- NAVBAR --}}
+            @if (request()->routeIs('landing'))
+                @include('layouts.navlanding')
+            @else
+                @include('layouts.navigation')
+            @endif
+
 
             <!-- Page Heading -->
             @isset($header)
