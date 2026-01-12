@@ -25,12 +25,33 @@ class CertificateController extends Controller
         return view('certificates.show', compact('certificate'));
     }
 
-    public function download($id)
+   public function download($id)
 {
-    $pdf = Pdf::loadView('certificates.pdf')
-        ->setPaper('a4', 'landscape');
+    $certificate = Certificate::with('user')
+        ->where('id', $id)
+        ->where('user_id', auth()->id())
+        ->firstOrFail();
 
-    return $pdf->download('certificate.pdf');
+    $pdf = Pdf::loadView('certificates.pdf', compact('certificate'));
+
+    $pdf->setOptions([
+        'dpi' => 72,
+        'defaultFont' => 'DejaVu Sans',
+        'isHtml5ParserEnabled' => true,
+        'isRemoteEnabled' => true,
+        'enable_font_subsetting' => false,
+    ]);
+
+    // A4 LANDSCAPE in POINTS (DOMPDF native)
+    // 1mm = 2.83465 pt
+    $pdf = Pdf::loadView('certificates.pdf', compact('certificate'))
+    ->setPaper([0, 0, 841.89, 595.28], 'landscape');
+
+    return $pdf->download(
+        'Sertifikat-SkillBridge-' . $certificate->id . '.pdf'
+    );
+    
+
 }
 
 }
