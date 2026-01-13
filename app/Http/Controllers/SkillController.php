@@ -53,15 +53,13 @@ class SkillController extends Controller
             }
         }
 
-
         return view('skills.index', [
             'courses'        => $filtered->values()->all(),
             'recommended'    => $recommended->values()->all(),
             'activeCategory' => $category,
             'activeLevel'    => $level,
-            'completedCourseSlugs' => $completedCourseSlugs, // 👈 WAJIB
+            'completedCourseSlugs' => $completedCourseSlugs,
         ]);
-
     }
 
     /**
@@ -71,7 +69,7 @@ class SkillController extends Controller
     {
         $courses = $this->getCourses();
         $course  = collect($courses)->firstWhere('slug', $slug);
-        abort_if(! $course, 404);
+        abort_if(!$course, 404);
 
         $userId = Auth::id();
 
@@ -108,11 +106,11 @@ class SkillController extends Controller
     {
         $courses = $this->getCourses();
         $course  = collect($courses)->firstWhere('slug', $slug);
-        abort_if(! $course, 404);
+        abort_if(!$course, 404);
 
         $modules = $course['modules'] ?? [];
         $module  = $modules[$moduleIndex] ?? null;
-        abort_if(! $module, 404);
+        abort_if(!$module, 404);
 
         $userId = Auth::id();
 
@@ -134,11 +132,12 @@ class SkillController extends Controller
             'isLastModule' => $isLastModule,
         ]);
     }
+
     public function completeModule(Request $request, string $slug, int $moduleIndex)
     {
         $courses = $this->getCourses();
         $course  = collect($courses)->firstWhere('slug', $slug);
-        abort_if(! $course, 404);
+        abort_if(!$course, 404);
 
         $modules = $course['modules'] ?? [];
         $totalModules = count($modules);
@@ -173,7 +172,6 @@ class SkillController extends Controller
             ->with('success', 'Tugas tersimpan. Lanjut modul berikutnya ✅');
     }
 
-
     /**
      * Pelatihan saya (sementara ambil semua course).
      */
@@ -190,7 +188,6 @@ class SkillController extends Controller
     public function getCourses(): array
     {
         return [
-
             // ==============================
             // 1. WEB DEVELOPMENT DASAR
             // ==============================
@@ -202,7 +199,6 @@ class SkillController extends Controller
                 'duration'    => '3 jam',
                 'thumbnail'   => 'https://i.ytimg.com/vi/qz0aGYrrlhU/maxresdefault.jpg',
                 'description' => 'Pelatihan ini mengajarkan dasar HTML & CSS dari nol untuk membuat halaman web yang rapi, responsif, dan modern.',
-
                 'benefits' => [
                     [
                         'title' => 'Yang akan kamu pelajari',
@@ -227,7 +223,6 @@ class SkillController extends Controller
                         ],
                     ],
                 ],
-
                 'modules' => [
                     [
                         'title'       => 'Mengenal HTML',
@@ -249,10 +244,12 @@ class SkillController extends Controller
                     ],
                     [
                         'title'       => 'Mini Project: Landing Page',
-                        'type'        => 'project',
+                        'type'        => 'video',
+                        'youtube_id'  => 'gXLjWRteuWI',
+                        'video_url'   => 'https://www.youtube.com/embed/gXLjWRteuWI',
                         'duration'    => '45 menit',
-                        'description' => 'Membangun halaman landing page pertama kamu.',
-                        'task' => 'Buat landing page sederhana (Hero + 3 benefit + tombol CTA). Kumpulkan link atau screenshot.'
+                        'description' => 'Membangun landing page sederhana menggunakan HTML & CSS (Hero section, benefit, dan CTA).',
+                        'task'        => 'Buat landing page sederhana (Hero + 3 benefit + tombol CTA). Kumpulkan link atau screenshot.'
                     ],
                 ],
             ],
@@ -268,8 +265,6 @@ class SkillController extends Controller
                 'duration'    => '4 jam',
                 'thumbnail'   => 'https://i.ytimg.com/vi/W6NZfCO5SIk/maxresdefault.jpg',
                 'description' => 'Belajar dasar JavaScript seperti variabel, fungsi, event, dan DOM untuk membuat website interaktif.',
-                
-
                 'benefits' => [
                     [
                         'title' => 'Yang akan kamu pelajari',
@@ -294,7 +289,6 @@ class SkillController extends Controller
                         ],
                     ],
                 ],
-
                 'modules' => [
                     [
                         'title'       => 'Pengenalan JavaScript',
@@ -337,7 +331,6 @@ class SkillController extends Controller
                 'duration'    => '5 jam',
                 'thumbnail'   => 'https://i.ytimg.com/vi/ImtZ5yENzgE/maxresdefault.jpg',
                 'description' => 'Pelatihan ini mengajarkan dasar framework Laravel mulai dari routing, controller, Blade, hingga CRUD.',
-
                 'benefits' => [
                     [
                         'title' => 'Yang akan kamu pelajari',
@@ -363,7 +356,6 @@ class SkillController extends Controller
                         ],
                     ],
                 ],
-
                 'modules' => [
                     [
                         'title'       => 'Pengenalan Laravel',
@@ -377,8 +369,8 @@ class SkillController extends Controller
                     [
                         'title'       => 'Routing & Controller',
                         'type'        => 'video',
-                        'youtube_id'  => 'MFYzvO75Udw',
-                        'video_url'   => 'https://www.youtube.com/embed/MFYzvO75Udw',
+                        'youtube_id'  => 'nuDpLN2dazU',
+                        'video_url'   => 'https://www.youtube.com/embed/nuDpLN2dazU',
                         'duration'    => '30 menit',
                         'description' => 'Belajar alur kerja route → controller.',
                         'task'        => 'Buat route /profil yang memanggil controller (ProfilController) dan menampilkan view profil.blade.php berisi nama + sekolah. Kumpulkan screenshot hasilnya.'
@@ -386,8 +378,8 @@ class SkillController extends Controller
                     [
                         'title'       => 'Membuat CRUD',
                         'type'        => 'video',
-                        'youtube_id'  => 'T8IqcLWCVP0',
-                        'video_url'   => 'https://www.youtube.com/embed/T8IqcLWCVP0',
+                        'youtube_id'  => 'vCgsvdASoJA',
+                        'video_url'   => 'https://www.youtube.com/embed/vCgsvdASoJA',
                         'duration'    => '40 menit',
                         'description' => 'Membangun CRUD dari awal hingga selesai.',
                         'task'        => 'Buat CRUD sederhana "Catatan" (judul, isi). Minimal bisa: tambah data + tampilkan list. Kumpulkan link repo GitHub atau screenshot halaman list + form tambah.'
@@ -406,7 +398,6 @@ class SkillController extends Controller
                 'duration'    => '3 jam',
                 'thumbnail'   => 'https://i.ytimg.com/vi/_Hp_dI0DzY4/maxresdefault.jpg',
                 'description' => 'Belajar dasar UI/UX design: cara membuat tampilan aplikasi dan website yang rapi, jelas, dan nyaman dipakai pengguna.',
-
                 'benefits' => [
                     [
                         'title' => 'Yang akan kamu pelajari',
@@ -433,7 +424,6 @@ class SkillController extends Controller
                         ],
                     ],
                 ],
-
                 'modules' => [
                     [
                         'title'       => 'Pengenalan UI/UX & Contoh Nyata',
@@ -447,15 +437,17 @@ class SkillController extends Controller
                     [
                         'title'       => 'Prinsip Dasar Layout & Hirarki Visual',
                         'type'        => 'video',
-                        'youtube_id'  => '9B1V9cX0Quo',
-                        'video_url'   => 'https://www.youtube.com/embed/9B1V9cX0Quo',
+                        'youtube_id'  => 'DKwSrMYt15g',
+                        'video_url'   => 'https://www.youtube.com/embed/DKwSrMYt15g',
                         'duration'    => '30 menit',
                         'description' => 'Belajar tentang grid, spacing, alignment, dan fokus perhatian pengguna.',
                         'task'         => 'Buat wireframe 1 layar landing page (Hero + 3 benefit + testimonial/CTA). Boleh di kertas (foto) atau di Figma (screenshot).'
                     ],
                     [
                         'title'       => 'Wireframe & Prototype Sederhana di Figma',
-                        'type'        => 'project',
+                        'type'        => 'video',
+                        'youtube_id'  => 'iyrEStiTZh0',
+                        'video_url'   => 'https://www.youtube.com/embed/iyrEStiTZh0',
                         'duration'    => '40 menit',
                         'description' => 'Membuat wireframe sederhana untuk halaman mobile / web dan dijadikan prototype klik.',
                         'task'         => 'Buat 3 layar (Home, Detail, Checkout/Login). Hubungkan jadi prototype (klik tombol berpindah layar). Kumpulkan link Figma.'
@@ -463,7 +455,9 @@ class SkillController extends Controller
                 ],
             ],
 
+            // ==============================
             // 5. UI/UX Landing Page
+            // ==============================
             [
                 'slug'        => 'uiux-landingpage-dasar',
                 'title'       => 'UI/UX Design: Membuat Landing Page Modern',
@@ -472,7 +466,6 @@ class SkillController extends Controller
                 'duration'    => '4 jam',
                 'thumbnail'   => 'https://i.ytimg.com/vi/5gRhhjFnt2w/hqdefault.jpg',
                 'description' => 'Belajar membuat landing page modern dengan prinsip UI/UX yang benar.',
-
                 'benefits' => [
                     [
                         'title' => 'Yang akan kamu pelajari',
@@ -497,7 +490,6 @@ class SkillController extends Controller
                         ],
                     ],
                 ],
-
                 'modules' => [
                     [
                         'title'       => 'Dasar UI/UX & Wireframing',
@@ -511,8 +503,8 @@ class SkillController extends Controller
                     [
                         'title'       => 'Membuat Layout Landing Page Modern',
                         'type'        => 'video',
-                        'youtube_id'  => 'u1Z5BtqR0g8',
-                        'video_url'   => 'https://www.youtube.com/embed/u1Z5BtqR0g8',
+                        'youtube_id'  => 'sUM0IUURMqM',
+                        'video_url'   => 'https://www.youtube.com/embed/sUM0IUURMqM',
                         'duration'    => '35 menit',
                         'description' => 'Desain hero section, card, CTA, dan visual lainnya.',
                         'task'         => 'Ubah wireframe menjadi desain visual 1 layar (warna, font, card, tombol). Pastikan ada 1 CTA yang jelas. Kumpulkan screenshot atau link Figma.'
@@ -538,7 +530,6 @@ class SkillController extends Controller
                 'duration'    => '3 jam',
                 'thumbnail'   => 'https://i.ytimg.com/vi/c9Wg6Cb_YlU/hqdefault.jpg',
                 'description' => 'Belajar membuat wireframe dan alur sederhana untuk aplikasi / website sebelum masuk ke desain final.',
-
                 'benefits' => [
                     [
                         'title' => 'Yang akan kamu pelajari',
@@ -563,7 +554,6 @@ class SkillController extends Controller
                         ],
                     ],
                 ],
-
                 'modules' => [
                     [
                         'title'       => 'Dasar UI/UX & Wireframe',
@@ -577,8 +567,8 @@ class SkillController extends Controller
                     [
                         'title'       => 'Membuat Wireframe di Figma',
                         'type'        => 'video',
-                        'youtube_id'  => 'c9F5mCq2Eu8',
-                        'video_url'   => 'https://www.youtube.com/embed/c9F5mCq2Eu8',
+                        'youtube_id'  => 'qWIdforZ9x0',
+                        'video_url'   => 'https://www.youtube.com/embed/qWIdforZ9x0',
                         'duration'    => '30 menit',
                         'description' => 'Praktik membuat wireframe low-fidelity di Figma.',
                         'task'         => 'Buat 3 wireframe low-fidelity di Figma: Home, List, Detail. Fokus ke layout & hirarki (tanpa warna dulu). Kumpulkan link/screenshot.'
@@ -594,212 +584,248 @@ class SkillController extends Controller
             ],
 
             // ==============================
-    // MARKETING 1: DIGITAL MARKETING DASAR
-    // ==============================
-    [
-        'slug'        => 'digital-marketing-dasar',
-        'title'       => 'Digital Marketing Dasar untuk Pemula',
-        'category'    => 'Marketing',
-        'level'       => 'Pemula',
-        'duration'    => '3 jam',
-        'thumbnail'   => 'https://i.ytimg.com/vi/z-uSvhg_-20/maxresdefault.jpg',
-        'description' => 'Belajar pondasi digital marketing: channel, funnel sederhana, persona, dan dasar SEO untuk mulai promosi online dengan benar.',
-
-        'benefits' => [
+            // MARKETING 1: DIGITAL MARKETING DASAR
+            // ==============================
             [
-                'title' => 'Yang akan kamu pelajari',
-                'items' => [
-                    'Konsep channel marketing (search, social, content).',
-                    'Buyer persona & tujuan promosi.',
-                    'Dasar funnel & CTA yang jelas.',
-                    'Dasar SEO untuk pemula.',
+                'slug'        => 'digital-marketing-dasar',
+                'title'       => 'Digital Marketing Dasar untuk Pemula',
+                'category'    => 'Marketing',
+                'level'       => 'Pemula',
+                'duration'    => '3 jam',
+                'thumbnail'   => 'https://i.ytimg.com/vi/z-uSvhg_-20/maxresdefault.jpg',
+                'description' => 'Belajar pondasi digital marketing: channel, funnel sederhana, persona, dan dasar SEO untuk mulai promosi online dengan benar.',
+                'benefits' => [
+                    [
+                        'title' => 'Yang akan kamu pelajari',
+                        'items' => [
+                            'Konsep channel marketing (search, social, content).',
+                            'Buyer persona & tujuan promosi.',
+                            'Dasar funnel & CTA yang jelas.',
+                            'Dasar SEO untuk pemula.',
+                        ],
+                    ],
+                    [
+                        'title' => 'Cocok untuk siapa?',
+                        'items' => [
+                            'UMKM yang baru mulai promosi online.',
+                            'Pemula yang ingin masuk dunia digital marketing.',
+                            'Pelajar/mahasiswa yang butuh skill praktis.',
+                        ],
+                    ],
+                    [
+                        'title' => 'Setelah selesai, kamu bisa…',
+                        'items' => [
+                            'Menyusun rencana promosi sederhana.',
+                            'Menentukan target audiens & pesan utama.',
+                            'Membuat checklist marketing mingguan.',
+                        ],
+                    ],
+                ],
+                'modules' => [
+                    [
+                        'title'       => 'Pengenalan Digital Marketing (Dasar)',
+                        'type'        => 'video',
+                        'youtube_id'  => 'z-uSvhg_-20',
+                        'video_url'   => 'https://www.youtube.com/embed/z-uSvhg_-20',
+                        'duration'    => '25 menit',
+                        'description' => 'Gambaran besar digital marketing, channel, dan cara memulai.',
+                        'task'         => 'Tulis 1 produk/jasa yang ingin kamu promosikan + 1 target audiensnya (siapa, masalahnya apa, ingin hasil apa).'
+                    ],
+                    [
+                        'title'       => 'Membuat Buyer Persona',
+                        'type'        => 'video',
+                        'youtube_id'  => 'UAbVYRyYktY',
+                        'video_url'   => 'https://www.youtube.com/embed/UAbVYRyYktY',
+                        'duration'    => '15 menit',
+                        'description' => 'Cara cepat menyusun persona agar kontenmu tepat sasaran.',
+                        'task'         => 'Buat 1 buyer persona singkat (nama, umur, kebutuhan, pain point, platform favorit).'
+                    ],
+                    [
+                        'title'       => 'Dasar SEO untuk Pemula',
+                        'type'        => 'video',
+                        'youtube_id'  => 'rpwD50v0Ubo',
+                        'video_url'   => 'https://www.youtube.com/embed/rpwD50v0Ubo',
+                        'duration'    => '20 menit',
+                        'description' => 'Pondasi SEO: keyword, intent, dan struktur konten.',
+                        'task'         => 'Cari 5 keyword yang relevan untuk produkmu + tulis 1 judul artikel/landing page yang cocok.'
+                    ],
                 ],
             ],
+
+            // ==============================
+            // MARKETING 2: SOCIAL MEDIA MARKETING UNTUK UMKM
+            // ==============================
             [
-                'title' => 'Cocok untuk siapa?',
-                'items' => [
-                    'UMKM yang baru mulai promosi online.',
-                    'Pemula yang ingin masuk dunia digital marketing.',
-                    'Pelajar/mahasiswa yang butuh skill praktis.',
+                'slug'        => 'social-media-marketing-umkm',
+                'title'       => 'Social Media Marketing untuk UMKM',
+                'category'    => 'Marketing',
+                'level'       => 'Pemula – Menengah',
+                'duration'    => '3.5 jam',
+                'thumbnail'   => 'https://i.ytimg.com/vi/yb1tjeq67_w/maxresdefault.jpg',
+                'description' => 'Belajar strategi konten, engagement, dan evaluasi performa agar akun bisnis kamu makin rapi dan efektif.',
+                'benefits' => [
+                    [
+                        'title' => 'Yang akan kamu pelajari',
+                        'items' => [
+                            'Membuat pilar konten (edukasi, promo, bukti sosial).',
+                            'Hook & struktur caption sederhana.',
+                            'Dasar metrik: reach, engagement, CTR.',
+                        ],
+                    ],
+                    [
+                        'title' => 'Cocok untuk siapa?',
+                        'items' => [
+                            'UMKM yang ingin jualan lewat Instagram/TikTok.',
+                            'Admin sosial media pemula.',
+                            'Content creator yang ingin lebih terarah.',
+                        ],
+                    ],
+                    [
+                        'title' => 'Setelah selesai, kamu bisa…',
+                        'items' => [
+                            'Bikin kalender konten 14 hari.',
+                            'Tahu konten mana yang perlu diulang/ditingkatkan.',
+                            'Membuat CTA yang lebih jelas untuk jualan.',
+                        ],
+                    ],
+                ],
+                'modules' => [
+                    [
+                        'title'       => 'Dasar Social Media Marketing',
+                        'type'        => 'video',
+                        'youtube_id'  => 'yb1tjeq67_w',
+                        'video_url'   => 'https://www.youtube.com/embed/yb1tjeq67_w',
+                        'duration'    => '20 menit',
+                        'description' => 'Prinsip dasar strategi konten & engagement.',
+                        'task'         => 'Tentukan 3 pilar konten untuk bisnismu (edukasi/promo/bukti sosial) + contoh 2 ide posting tiap pilar.'
+                    ],
+                    [
+                        'title'       => 'Membuat Konten yang Menarik (Praktik)',
+                        'type'        => 'video',
+                        'youtube_id'  => 'LXFtOs3qn7o',
+                        'video_url'   => 'https://www.youtube.com/embed/LXFtOs3qn7o',
+                        'duration'    => '25 menit',
+                        'description' => 'Cara menyusun konten agar konsisten dan tidak random.',
+                        'task'         => 'Buat 5 ide konten (judul + poin) untuk 1 minggu.'
+                    ],
+                    [
+                        'title'       => 'Mini Project: Kalender Konten 14 Hari',
+                        'type'        => 'project',
+                        'duration'    => '45 menit',
+                        'description' => 'Susun jadwal posting 14 hari (format: tanggal, jenis konten, topik, CTA).',
+                        'task'         => 'Kumpulkan kalender konten 14 hari (link Google Docs/Sheet atau file).'
+                    ],
                 ],
             ],
+
+            // ==============================
+            // MARKETING 3: COPYWRITING DASAR
+            // ==============================
             [
-                'title' => 'Setelah selesai, kamu bisa…',
-                'items' => [
-                    'Menyusun rencana promosi sederhana.',
-                    'Menentukan target audiens & pesan utama.',
-                    'Membuat checklist marketing mingguan.',
+                'slug'        => 'copywriting-dasar',
+                'title'       => 'Copywriting Dasar untuk Iklan & Konten',
+                'category'    => 'Marketing',
+                'level'       => 'Pemula',
+                'duration'    => '2.5 jam',
+                'thumbnail'   => 'https://i.ytimg.com/vi/8YWbVJNmsq8/maxresdefault.jpg',
+                'description' => 'Belajar menulis caption, headline, dan copy iklan yang jelas, enak dibaca, dan mendorong orang untuk action.',
+                'benefits' => [
+                    [
+                        'title' => 'Yang akan kamu pelajari',
+                        'items' => [
+                            'Cara menulis headline yang menarik.',
+                            'Framework AIDA & PAS untuk iklan.',
+                            'Copy singkat untuk IG/landing page.',
+                        ],
+                    ],
+                    [
+                        'title' => 'Cocok untuk siapa?',
+                        'items' => [
+                            'UMKM/penjual online.',
+                            'Admin sosial media & content creator.',
+                            'Pemula yang ingin jago nulis promosi.',
+                        ],
+                    ],
+                    [
+                        'title' => 'Setelah selesai, kamu bisa…',
+                        'items' => [
+                            'Membuat 3 versi caption yang lebih rapi.',
+                            'Menulis copy iklan singkat yang jelas CTA-nya.',
+                            'Menyusun struktur landing page sederhana.',
+                        ],
+                    ],
+                ],
+                'modules' => [
+                    [
+                        'title'       => 'Dasar Copywriting untuk Pemula',
+                        'type'        => 'video',
+                        'youtube_id'  => '8YWbVJNmsq8',
+                        'video_url'   => 'https://www.youtube.com/embed/8YWbVJNmsq8',
+                        'duration'    => '20 menit',
+                        'description' => 'Pondasi copywriting dan contoh penerapannya.',
+                        'task'         => 'Tulis 10 headline untuk 1 produk (pilih 3 terbaik).'
+                    ],
+                    [
+                        'title'       => 'Framework AIDA & PAS',
+                        'type'        => 'video',
+                        'youtube_id'  => 'zrHH-BDeCDc',
+                        'video_url'   => 'https://www.youtube.com/embed/zrHH-BDeCDc',
+                        'duration'    => '25 menit',
+                        'description' => 'Cara bikin copy terstruktur yang lebih persuasif.',
+                        'task'         => 'Buat 1 iklan dengan AIDA + 1 iklan dengan PAS untuk produk yang sama.'
+                    ],
+                    [
+                        'title'       => 'Membedah Copy Brand Terkenal',
+                        'type'        => 'video',
+                        'youtube_id'  => 'xRceOoqRJHw',
+                        'video_url'   => 'https://www.youtube.com/embed/xRceOoqRJHw',
+                        'duration'    => '15 menit',
+                        'description' => 'Analisis contoh copy dari brand terkenal dan alasan copy tersebut efektif.',
+                        'task'        => 'Pilih 1 brand, tulis 3 alasan kenapa copy mereka menarik.'
+                    ],
+                    [
+                        'title'       => 'Menulis Copy Berdasarkan Pain Point',
+                        'type'        => 'video',
+                        'youtube_id'  => 'mhcoffE7-PY',
+                        'video_url'   => 'https://www.youtube.com/embed/mhcoffE7-PY',
+                        'duration'    => '20 menit',
+                        'description' => 'Mengubah masalah audiens menjadi copy yang menjual.',
+                        'task'        => 'Tulis 3 pain point audiens lalu ubah menjadi copy promosi.'
+                    ],
+                    [
+                        'title'       => 'Formula Copywriting (AIDA & PAS)',
+                        'type'        => 'video',
+                        'youtube_id'  => 'rQRHqwqnMkQ',
+                        'video_url'   => 'https://www.youtube.com/embed/rQRHqwqnMkQ',
+                        'duration'    => '20 menit',
+                        'description' => 'Penerapan formula AIDA dan PAS dalam iklan dan konten.',
+                        'task'        => 'Buat 1 copy dengan AIDA dan 1 copy dengan PAS.'
+                    ],
+                    [
+                        'title'       => 'Menulis Call To Action (CTA) yang Kuat',
+                        'type'        => 'video',
+                        'youtube_id'  => 'zBNcJ0FMX3o',
+                        'video_url'   => 'https://www.youtube.com/embed/zBNcJ0FMX3o',
+                        'duration'    => '15 menit',
+                        'description' => 'Cara membuat CTA yang mendorong audiens melakukan aksi.',
+                        'task'        => 'Buat 5 variasi CTA untuk 1 produk.'
+                    ],
+                    [
+                        'title'       => 'Simulasi Copy untuk Media Sosial',
+                        'type'        => 'project',
+                        'duration'    => '25 menit',
+                        'description' => 'Latihan membuat copy untuk Instagram, WhatsApp, dan Marketplace.',
+                        'task'        => 'Buat 3 versi copy untuk 3 platform berbeda.'
+                    ],
+                    [
+                        'title'       => 'Final Project: Campaign Copy Sederhana',
+                        'type'        => 'project',
+                        'duration'    => '45 menit',
+                        'description' => 'Menyusun satu campaign copy lengkap dari awal sampai CTA.',
+                        'task'        => 'Kumpulkan 1 campaign berisi headline, caption, CTA, dan deskripsi produk.'
+                    ],
                 ],
             ],
-        ],
-
-        'modules' => [
-            [
-                'title'       => 'Pengenalan Digital Marketing (Dasar)',
-                'type'        => 'video',
-                'youtube_id'  => 'z-uSvhg_-20',
-                'video_url'   => 'https://www.youtube.com/embed/z-uSvhg_-20',
-                'duration'    => '25 menit',
-                'description' => 'Gambaran besar digital marketing, channel, dan cara memulai.',
-                'task'         => 'Tulis 1 produk/jasa yang ingin kamu promosikan + 1 target audiensnya (siapa, masalahnya apa, ingin hasil apa).'
-            ],
-            [
-                'title'       => 'Membuat Buyer Persona',
-                'type'        => 'video',
-                'youtube_id'  => 'UAbVYRyYktY',
-                'video_url'   => 'https://www.youtube.com/embed/UAbVYRyYktY',
-                'duration'    => '15 menit',
-                'description' => 'Cara cepat menyusun persona agar kontenmu tepat sasaran.',
-                'task'         => 'Buat 1 buyer persona singkat (nama, umur, kebutuhan, pain point, platform favorit).'
-            ],
-            [
-                'title'       => 'Dasar SEO untuk Pemula',
-                'type'        => 'video',
-                'youtube_id'  => 'rpwD50v0Ubo',
-                'video_url'   => 'https://www.youtube.com/embed/rpwD50v0Ubo',
-                'duration'    => '20 menit',
-                'description' => 'Pondasi SEO: keyword, intent, dan struktur konten.',
-                'task'         => 'Cari 5 keyword yang relevan untuk produkmu + tulis 1 judul artikel/landing page yang cocok.'
-            ],
-        ],
-    ],
-
-    // ==============================
-    // MARKETING 2: SOCIAL MEDIA MARKETING UNTUK UMKM
-    // ==============================
-    [
-        'slug'        => 'social-media-marketing-umkm',
-        'title'       => 'Social Media Marketing untuk UMKM',
-        'category'    => 'Marketing',
-        'level'       => 'Pemula – Menengah',
-        'duration'    => '3.5 jam',
-        'thumbnail'   => 'https://i.ytimg.com/vi/yb1tjeq67_w/maxresdefault.jpg',
-        'description' => 'Belajar strategi konten, engagement, dan evaluasi performa agar akun bisnis kamu makin rapi dan efektif.',
-
-        'benefits' => [
-            [
-                'title' => 'Yang akan kamu pelajari',
-                'items' => [
-                    'Membuat pilar konten (edukasi, promo, bukti sosial).',
-                    'Hook & struktur caption sederhana.',
-                    'Dasar metrik: reach, engagement, CTR.',
-                ],
-            ],
-            [
-                'title' => 'Cocok untuk siapa?',
-                'items' => [
-                    'UMKM yang ingin jualan lewat Instagram/TikTok.',
-                    'Admin sosial media pemula.',
-                    'Content creator yang ingin lebih terarah.',
-                ],
-            ],
-            [
-                'title' => 'Setelah selesai, kamu bisa…',
-                'items' => [
-                    'Bikin kalender konten 14 hari.',
-                    'Tahu konten mana yang perlu diulang/ditingkatkan.',
-                    'Membuat CTA yang lebih jelas untuk jualan.',
-                ],
-            ],
-        ],
-
-        'modules' => [
-            [
-                'title'       => 'Dasar Social Media Marketing',
-                'type'        => 'video',
-                'youtube_id'  => 'yb1tjeq67_w',
-                'video_url'   => 'https://www.youtube.com/embed/yb1tjeq67_w',
-                'duration'    => '20 menit',
-                'description' => 'Prinsip dasar strategi konten & engagement.',
-                'task'         => 'Tentukan 3 pilar konten untuk bisnismu (edukasi/promo/bukti sosial) + contoh 2 ide posting tiap pilar.'
-            ],
-            [
-                'title'       => 'Membuat Konten yang Menarik (Praktik)',
-                'type'        => 'video',
-                'youtube_id'  => 'LXFtOs3qn7o',
-                'video_url'   => 'https://www.youtube.com/embed/LXFtOs3qn7o',
-                'duration'    => '25 menit',
-                'description' => 'Cara menyusun konten agar konsisten dan tidak random.',
-                'task'         => 'Buat 5 ide konten (judul + poin) untuk 1 minggu.'
-            ],
-            [
-                'title'       => 'Mini Project: Kalender Konten 14 Hari',
-                'type'        => 'project',
-                'duration'    => '45 menit',
-                'description' => 'Susun jadwal posting 14 hari (format: tanggal, jenis konten, topik, CTA).',
-                'task'         => 'Kumpulkan kalender konten 14 hari (link Google Docs/Sheet atau file).'
-            ],
-        ],
-    ],
-
-    // ==============================
-    // MARKETING 3: COPYWRITING DASAR
-    // ==============================
-    [
-        'slug'        => 'copywriting-dasar',
-        'title'       => 'Copywriting Dasar untuk Iklan & Konten',
-        'category'    => 'Marketing',
-        'level'       => 'Pemula',
-        'duration'    => '2.5 jam',
-        'thumbnail'   => 'https://i.ytimg.com/vi/8YWbVJNmsq8/maxresdefault.jpg',
-        'description' => 'Belajar menulis caption, headline, dan copy iklan yang jelas, enak dibaca, dan mendorong orang untuk action.',
-
-        'benefits' => [
-            [
-                'title' => 'Yang akan kamu pelajari',
-                'items' => [
-                    'Cara menulis headline yang menarik.',
-                    'Framework AIDA & PAS untuk iklan.',
-                    'Copy singkat untuk IG/landing page.',
-                ],
-            ],
-            [
-                'title' => 'Cocok untuk siapa?',
-                'items' => [
-                    'UMKM/penjual online.',
-                    'Admin sosial media & content creator.',
-                    'Pemula yang ingin jago nulis promosi.',
-                ],
-            ],
-            [
-                'title' => 'Setelah selesai, kamu bisa…',
-                'items' => [
-                    'Membuat 3 versi caption yang lebih rapi.',
-                    'Menulis copy iklan singkat yang jelas CTA-nya.',
-                    'Menyusun struktur landing page sederhana.',
-                ],
-            ],
-        ],
-
-        'modules' => [
-            [
-                'title'       => 'Dasar Copywriting untuk Pemula',
-                'type'        => 'video',
-                'youtube_id'  => '8YWbVJNmsq8',
-                'video_url'   => 'https://www.youtube.com/embed/8YWbVJNmsq8',
-                'duration'    => '20 menit',
-                'description' => 'Pondasi copywriting dan contoh penerapannya.',
-                'task'         => 'Tulis 10 headline untuk 1 produk (pilih 3 terbaik).'
-            ],
-            [
-                'title'       => 'Framework AIDA & PAS',
-                'type'        => 'video',
-                'youtube_id'  => 'zrHH-BDeCDc',
-                'video_url'   => 'https://www.youtube.com/embed/zrHH-BDeCDc',
-                'duration'    => '25 menit',
-                'description' => 'Cara bikin copy terstruktur yang lebih persuasif.',
-                'task'         => 'Buat 1 iklan dengan AIDA + 1 iklan dengan PAS untuk produk yang sama.'
-            ],
-            [
-                'title'       => 'Mini Project: Paket Copy untuk Produk',
-                'type'        => 'project',
-                'duration'    => '35 menit',
-                'description' => 'Buat 1 hook, 1 caption IG, dan 1 copy iklan singkat lengkap CTA.',
-                'task'         => 'Kumpulkan link dokumen berisi hook + caption + iklan (atau upload file).'
-            ],
-        ],
-    ],
-
         ];
     }
 }

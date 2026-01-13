@@ -1,5 +1,6 @@
 {{-- resources/views/skills/index.blade.php --}}
 <x-app-layout>
+    
     <x-slot name="header">
         <div class="flex flex-col gap-1">
             <p class="text-[11px] text-slate-500 uppercase tracking-wide">Belajar Skill</p>

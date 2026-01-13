@@ -76,9 +76,12 @@ Route::middleware(['auth'])->group(function () {
     | CV BUILDER (KODE KAMU)
     |--------------------------------------------------------------------------
     */
-    Route::get('/cv', [CVController::class, 'index'])->name('cv.index');
-    Route::post('/cv', [CVController::class, 'store'])->name('cv.store');
-    Route::get('/cv/view', [CVController::class, 'show'])->name('cv.view');
+   Route::middleware(['auth'])->prefix('cv')->name('cv.')->group(function () {
+    Route::get('/', [CVController::class, 'index'])->name('index'); // Form builder
+    Route::post('/store', [CVController::class, 'store'])->name('store'); // Simpan data
+    Route::get('/preview', [CVController::class, 'preview'])->name('preview'); // Preview CV
+    Route::get('/download', [CVController::class, 'downloadPDF'])->name('download'); // Download PDF
+});
 
     /*
     |--------------------------------------------------------------------------

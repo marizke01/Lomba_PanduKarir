@@ -18,8 +18,6 @@
                 <span class="px-2 py-0.5 rounded-full bg-slate-100">
                     {{ $course['video_count'] ?? collect($course['modules'] ?? [])->where('type', 'video')->count() }} video · {{ $course['duration'] ?? '—' }}
                 </span>
-
-
             </div>
         </div>
     </x-slot>
@@ -131,7 +129,6 @@
                     ],
                 ],
             ],
-            
         ];
 
         $sectionsForThisCourse = $extraSections[$course['slug']] ?? null;
@@ -167,8 +164,7 @@
                     {{-- TENTANG PELATIHAN --}}
                     <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
                         {{-- Foto / thumbnail --}}
-                        {{-- Thumbnail pelatihan (tanpa cropping, tapi tetap rapi) --}}
-                       @php
+                        @php
                             $thumb = $course['thumbnail'] ?? '';
                             $thumbFallback = $thumb ? str_replace('maxresdefault','hqdefault',$thumb) : 'https://placehold.co/1200x600?text=SkillBridge';
                         @endphp
@@ -179,7 +175,6 @@
                             alt="Thumbnail pelatihan {{ $course['title'] }}"
                             class="w-full h-full object-contain"
                         />
-
 
                         <div class="p-5 space-y-3">
                             <h3 class="text-sm font-semibold text-slate-900">
@@ -281,7 +276,6 @@
                                     </a>
                                 @endif
                             @endforeach
-
                         </div>
                     </div>
                 </div>
@@ -290,18 +284,70 @@
                 <div class="space-y-4">
                     <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-5">
                         <h3 class="text-sm font-semibold text-slate-900 mb-2">
-                            Mulai / lanjut belajar
+                            @if($completedModules >= $totalModules)
+                                🎉 Selamat!
+                            @elseif($completedModules > 0)
+                                Lanjut Belajar
+                            @else
+                                Mulai Belajar
+                            @endif
                         </h3>
+                        
                         <p class="text-xs text-slate-600 mb-3">
-                            Disarankan mulai dari modul pertama, lalu lanjutkan urut sampai project mini di akhir.
+                            @if($completedModules >= $totalModules)
+                                Kamu sudah menyelesaikan semua modul pelatihan ini!
+                            @else
+                                Disarankan mulai dari modul pertama, lalu lanjutkan urut sampai project mini di akhir.
+                            @endif
                         </p>
-                        <form method="POST" action="{{ route('skills.start', $course['slug']) }}">
-                            @csrf
-                            <button
-                                class="w-full inline-flex items-center justify-center px-4 py-2 rounded-xl bg-violet-600 text-white text-xs font-medium hover:bg-violet-700">
-                                Mulai / lanjut pelatihan
-                            </button>
-                        </form>
+                        
+                        {{-- LOGIKA TOMBOL --}}
+                        @if($completedModules >= $totalModules)
+                            {{-- JIKA SUDAH SELESAI SEMUA MODUL --}}
+                            <a href="{{ route('skills.index') }}"
+                               class="w-full inline-flex items-center justify-center px-4 py-2 rounded-xl bg-emerald-600 text-white text-xs font-medium hover:bg-emerald-700 transition">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                                </svg>
+                                Kembali ke Halaman Utama
+                            </a>
+                        @else
+                            {{-- JIKA BELUM SELESAI --}}
+                            @php
+                                $nextModuleIndex = $completedModules;
+                                $isLastModule = $nextModuleIndex >= ($totalModules - 1);
+                            @endphp
+                            
+                            <a href="{{ route('skills.module', [$course['slug'], $nextModuleIndex]) }}"
+                               class="w-full inline-flex items-center justify-center px-4 py-2 rounded-xl 
+                                      {{ $isLastModule ? 'bg-green-600 hover:bg-green-700' : 'bg-violet-600 hover:bg-violet-700' }} 
+                                      text-white text-xs font-medium transition">
+                                @if($completedModules === 0)
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    Mulai Modul Pertama
+                                @elseif($isLastModule)
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Kerjakan Modul Terakhir
+                                @else
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    Lanjutkan Modul {{ $nextModuleIndex + 1 }}
+                                @endif
+                            </a>
+                            
+                            {{-- INFO TAMBAHAN JIKA INI MODUL TERAKHIR --}}
+                            @if($isLastModule)
+                                <p class="text-[11px] text-green-600 mt-2 text-center">
+                                    ⭐ Ini modul terakhir! Selesaikan untuk menyelesaikan pelatihan.
+                                </p>
+                            @endif
+                        @endif
                     </div>
 
                     <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-5">
@@ -316,7 +362,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </x-app-layout>

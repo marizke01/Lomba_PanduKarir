@@ -4,65 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\CV;
 use Illuminate\Http\Request;
-use Spatie\Browsershot\Browsershot;
-
-
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class CVController extends Controller
 {
-
-public function downloadPDF()
-{
-    $cv = CV::where('user_id', auth()->id())->first();
-
-    if (!$cv) {
-        return redirect()->back()->with('error', 'CV tidak ditemukan.');
-    }
-
-    // Render blade ke HTML string
-    $html = view('cv.show', compact('cv'))->render();
-
-    $pdfPath = storage_path('app/public/cv' . auth()->id() . '.pdf');
-
-    // Generate PDF 100% sama dengan show.blade
-    Browsershot::html($html)
-    ->setOption('args', ['--no-sandbox'])
-    ->emulateMedia('screen')
-    ->showBackground()
-    ->format('A4')
-    ->windowSize(1200, 2000)
-    ->scale(0.90)
-    ->margins(15, 15, 15, 15)
-    ->save($pdfPath);
-
-
-    return response()->download($pdfPath)->deleteFileAfterSend(true);
-}
-
-
-        public function show()
-    {
-        $cv = CV::where('user_id', auth()->id())->first();
-
-        if (!$cv) {
-            return redirect()->route('cv.index')->with('error', 'Lengkapi CV terlebih dahulu.');
-        }
-
-        return view('cv.show', compact('cv'));
-    }
-
-
+    /**
+     * Tampilkan form CV builder
+     */
     public function index()
     {
-        // Ambil CV milik user
         $cv = CV::where('user_id', auth()->id())->first();
-
-        return view('cv.index', compact('cv'));
+        return view('cv.builder', compact('cv'));
     }
 
+    /**
+     * Simpan/update data CV
+     */
     public function store(Request $request)
     {
-        // Validasi input
         $data = $request->validate([
             'phone' => 'nullable|string',
             'location' => 'nullable|string',
@@ -70,7 +29,6 @@ public function downloadPDF()
             'hobbies' => 'nullable|string',
             'photo' => 'nullable|image|max:2048',
             'position' => 'nullable|string',
-
 
             'education' => 'nullable|array',
             'education.*.school' => 'nullable|string',
@@ -89,12 +47,15 @@ public function downloadPDF()
             'links.*' => 'nullable|string',
         ]);
 
-        if ($request->hasFile('photo')) {
-                $path = $request->file('photo')->store('cv_photos', 'public');
-                $data['photo_url'] = 'storage/' . $path;
-            }
-            
+        // Tambahkan nama dan email dari user
+        $data['name'] = auth()->user()->name;
+        $data['email'] = auth()->user()->email;
 
+        // Upload photo jika ada
+        if ($request->hasFile('photo')) {
+            $path = $request->file('photo')->store('cv_photos', 'public');
+            $data['photo_url'] = 'storage/' . $path;
+        }
 
         // Simpan/update CV
         CV::updateOrCreate(
@@ -102,6 +63,35 @@ public function downloadPDF()
             $data
         );
 
-        return back()->with('success', 'CV berhasil disimpan!');
+        return redirect()->route('cv.preview')->with('success', 'CV berhasil disimpan!');
+    }
+
+    /**
+     * Tampilkan preview CV
+     */
+    public function preview()
+    {
+        $cv = CV::where('user_id', auth()->id())->first();
+
+        if (!$cv) {
+            return redirect()->route('cv.index')->with('error', 'Silakan lengkapi data CV terlebih dahulu.');
+        }
+
+        return view('cv.preview', compact('cv'));
+    }
+
+    /**
+     * Download CV sebagai PDF
+     */
+    public function downloadPDF()
+    {
+        $cv = CV::where('user_id', auth()->id())->first();
+
+        if (!$cv) {
+            return redirect()->route('cv.index')->with('error', 'CV tidak ditemukan. Silakan buat CV terlebih dahulu.');
+        }
+
+        $pdf = Pdf::loadView('cv.pdf', compact('cv'));
+        return $pdf->download('CV-' . auth()->user()->name . '.pdf');
     }
 }
