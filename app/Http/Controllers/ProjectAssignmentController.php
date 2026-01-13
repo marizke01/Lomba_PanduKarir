@@ -37,12 +37,19 @@ class ProjectAssignmentController extends Controller
         $userId = Auth::id();
 
         // 🔐 AMBIL DATA PROJECT + POLICY CHECK
-        $assignment = ProjectAssignment::where('user_id', $userId)
-            ->where('project_slug', $slug)
-            ->firstOrFail();
+        $assignment = ProjectAssignment::firstOrCreate(
+            [
+                'user_id'      => $userId,
+                'project_slug' => $slug,
+            ],
+            [
+                'status' => 'in_progress',
+            ]
+        );
 
+        // POLICY CHECK (TETAP ADA)
         $this->authorize('submit', $assignment);
-        // ⬆️ SATU BARIS INI BUKTI POLICY AKTIF
+
 
         $validated = $request->validate([
             'submission_url' => ['required', 'url'],
