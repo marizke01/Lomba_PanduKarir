@@ -81,7 +81,7 @@ Proyek ini menerapkan strategi branching yang sederhana dan terstruktur untuk me
   → Branch production (kode stabil dan siap rilis)
 
 ### Branch Pendukung
-develop
+develop/*
 Berisi kode pengembangan aktif sebelum dirilis ke production
 
 feature/*
