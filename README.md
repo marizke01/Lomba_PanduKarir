@@ -148,5 +148,3 @@ Dengan penerapan CI/CD:
 * Kualitas kode lebih terjaga
 * Kolaborasi tim lebih terstruktur
 
-
-Tinggal bilang mau versi **ringkas / formal / teknis banget** ya 😄
