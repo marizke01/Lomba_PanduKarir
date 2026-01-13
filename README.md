@@ -1,59 +1,152 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+PanduKarir – CI/CD Project Documentation
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Deskripsi Proyek
 
-## About Laravel
+**PanduKarir** adalah aplikasi berbasis web yang dikembangkan menggunakan **Laravel** untuk membantu pengguna dalam pengelolaan dan pengembangan karier.
+Proyek ini menerapkan **CI/CD (Continuous Integration & Continuous Deployment)** menggunakan **GitHub Actions** untuk memastikan proses build, testing, dan deployment berjalan otomatis, konsisten, dan terkontrol.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Arsitektur CI/CD Pipeline
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Arsitektur CI/CD pada proyek ini terdiri dari beberapa tahapan utama:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. **Source Code Management**
 
-## Learning Laravel
+   * Repository dikelola menggunakan **GitHub**
+   * Setiap perubahan kode dilakukan melalui branch terpisah
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+2. **Continuous Integration (CI)**
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+   * Trigger otomatis saat terjadi `push` atau `pull request`
+   * Proses:
 
-## Laravel Sponsors
+     * Install dependencies
+     * Menjalankan pengecekan dasar (linting / build Laravel)
+     * Menjalankan test (jika tersedia)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+3. **Continuous Deployment (CD)**
 
-### Premium Partners
+   * Deployment ke:
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+     * **Staging** untuk pengujian
+     * **Production** untuk rilis final
+   * Deployment hanya dilakukan jika proses CI berhasil
 
-## Contributing
+ **Alur singkat pipeline:**
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```
+Developer → GitHub Repository → GitHub Actions (CI) → Staging → Production
+```
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Penjelasan Workflow GitHub Actions
 
-## Security Vulnerabilities
+Workflow GitHub Actions berada pada folder:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```
+.github/workflows/
+```
 
-## License
+### Tahapan Workflow:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+1. **Trigger**
+
+   * `push` ke branch tertentu
+   * `pull_request` ke branch utama
+
+2. **Job CI**
+
+   * Checkout repository
+   * Setup PHP dan Composer
+   * Install dependency Laravel
+   * Build aplikasi
+   * Menjalankan test (jika ada)
+
+3. **Job CD**
+
+   * Hanya berjalan jika job CI sukses
+   * Melakukan deployment ke server staging atau production
+
+Workflow ini memastikan bahwa **kode yang dideploy selalu dalam kondisi valid**.
+
+---
+
+## Branching Strategy
+
+Proyek ini menerapkan strategi branching yang sederhana dan terstruktur untuk menjaga stabilitas dan kualitas kode.
+
+### Branch Utama
+
+* `main`
+  → Branch production (kode stabil dan siap rilis)
+
+### Branch Pendukung
+develop
+Berisi kode pengembangan aktif sebelum dirilis ke production
+
+feature/*
+Digunakan untuk pengembangan fitur baru
+
+hotfix/*
+Digunakan untuk perbaikan bug kritis pada lingkungan production
+
+**Aturan utama:**
+
+* Tidak melakukan commit langsung ke `main`
+* Semua perubahan harus melalui Pull Request
+* Pull Request harus lulus CI sebelum merge
+
+---
+
+##  Cara Kerja Deployment Staging & Production
+
+###  Deployment Staging
+
+* Trigger: `push` ke branch `development`
+* Tujuan:
+
+  * Testing fitur
+  * Validasi integrasi
+* Environment: Staging server
+
+###  Deployment Production
+
+* Trigger: `merge` ke branch `main`
+* Tujuan:
+
+  * Rilis aplikasi ke pengguna
+* Environment: Production server
+
+Deployment dilakukan secara otomatis oleh GitHub Actions untuk menghindari human error.
+
+---
+
+##  Mekanisme Rollback
+
+Untuk mengantisipasi kegagalan deployment, proyek ini menyediakan mekanisme rollback:
+
+1. **Rollback via Git**
+
+   * Kembali ke commit stabil sebelumnya
+   * Re-deploy otomatis melalui pipeline
+
+2. **Rollback Manual**
+
+   * Menggunakan backup versi sebelumnya di server
+   * Digunakan jika deployment otomatis gagal
+
+Rollback memastikan aplikasi tetap stabil dan meminimalkan downtime.
+
+---
+
+##  Kesimpulan
+
+Dengan penerapan CI/CD:
+
+* Proses deployment menjadi **lebih cepat**
+* Risiko error berkurang
+* Kualitas kode lebih terjaga
+* Kolaborasi tim lebih terstruktur
+
+
+Tinggal bilang mau versi **ringkas / formal / teknis banget** ya 😄
