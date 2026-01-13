@@ -137,14 +137,4 @@ Untuk mengantisipasi kegagalan deployment, proyek ini menyediakan mekanisme roll
 
 Rollback memastikan aplikasi tetap stabil dan meminimalkan downtime.
 
----
-
-##  Kesimpulan
-
-Dengan penerapan CI/CD:
-
-* Proses deployment menjadi **lebih cepat**
-* Risiko error berkurang
-* Kualitas kode lebih terjaga
-* Kolaborasi tim lebih terstruktur
 
