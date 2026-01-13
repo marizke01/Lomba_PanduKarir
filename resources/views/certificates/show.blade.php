@@ -1,71 +1,68 @@
 <x-app-layout>
-    <div class="py-12 flex justify-center bg-gradient-to-br from-slate-100 to-slate-200 min-h-screen">
+    <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 py-16">
 
-        <div class="relative bg-white w-[1000px] p-16 rounded-lg shadow-xl overflow-hidden">
+        <div class="relative w-[1100px] rounded-2xl bg-white shadow-2xl overflow-hidden">
 
-            {{-- DECORATIVE BACKGROUND --}}
-            <div class="absolute -top-24 -left-24 w-72 h-72 bg-indigo-200/40 rounded-full blur-3xl"></div>
-            <div class="absolute -bottom-24 -right-24 w-72 h-72 bg-sky-200/40 rounded-full blur-3xl"></div>
+            {{-- ACCENT BAR --}}
+            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-indigo-600 via-sky-500 to-indigo-600"></div>
 
-            {{-- OUTER BORDER --}}
-            <div class="absolute inset-4 border-4 border-indigo-600 rounded-lg"></div>
+            {{-- DECORATIVE BLUR --}}
+            <div class="absolute -top-32 -right-32 w-96 h-96 bg-indigo-300/30 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-32 -left-32 w-96 h-96 bg-sky-300/30 rounded-full blur-3xl"></div>
 
-            {{-- INNER BORDER --}}
-            <div class="absolute inset-8 border border-indigo-300 rounded-lg"></div>
-
-            {{-- CONTENT --}}
-            <div class="relative z-10">
+            <div class="relative z-10 p-20">
 
                 {{-- HEADER --}}
-                <div class="text-center mb-12">
-                    <p class="uppercase tracking-[0.3em] text-xs text-slate-500 mb-3">
+                <div class="text-center mb-14">
+                    <p class="uppercase tracking-[0.35em] text-xs text-slate-500 mb-4">
                         SkillBridge Certification
                     </p>
 
-                    <h1 class="text-5xl font-extrabold text-slate-900 tracking-wide">
+                    <h1 class="text-6xl font-extrabold text-slate-900">
                         Certificate
                     </h1>
 
-                    <div class="flex items-center justify-center gap-3 mt-4">
-                        <div class="h-px w-20 bg-indigo-400"></div>
-                        <span class="text-sm tracking-widest text-slate-600">
-                            of Completion
-                        </span>
-                        <div class="h-px w-20 bg-indigo-400"></div>
-                    </div>
+                    <p class="mt-3 text-sm tracking-widest text-slate-500">
+                        of Completion
+                    </p>
                 </div>
 
-                {{-- MAIN CONTENT --}}
-                <div class="text-center space-y-7">
-                    <p class="text-sm text-slate-600">
+                {{-- MAIN --}}
+                <div class="text-center space-y-8">
+
+                    <p class="text-sm text-slate-500">
                         This certificate is proudly presented to
                     </p>
 
-                    <h2 class="text-4xl font-semibold text-indigo-700 tracking-wide">
+                    <h2 class="text-5xl font-bold text-indigo-700">
                         {{ $certificate->user->name }}
                     </h2>
 
-                    <div class="max-w-2xl mx-auto">
-                        <p class="text-slate-700 leading-relaxed">
+                    <div class="max-w-3xl mx-auto">
+                        <p class="text-lg text-slate-700 leading-relaxed">
                             Telah berhasil menyelesaikan
                             <span class="font-semibold text-slate-900">
                                 {{ $certificate->project_title }}
                             </span>
                             sebagai bagian dari program pembelajaran dan simulasi
-                            project profesional di <span class="font-semibold">SkillBridge</span>.
+                            project profesional di
+                            <span class="font-semibold text-indigo-600">
+                                SkillBridge
+                            </span>.
                         </p>
                     </div>
                 </div>
 
                 {{-- DIVIDER --}}
-                <div class="flex justify-center my-12">
-                    <div class="h-[2px] w-40 bg-gradient-to-r from-transparent via-indigo-500 to-transparent"></div>
+                <div class="flex justify-center my-16">
+                    <div class="h-px w-64 bg-gradient-to-r from-transparent via-slate-400 to-transparent"></div>
                 </div>
 
                 {{-- FOOTER --}}
-                <div class="flex justify-between items-end">
+                <div class="flex justify-between items-center">
+
                     <div>
-                        <p class="text-xs text-slate-500 uppercase tracking-wide">
+                        <p class="text-xs uppercase tracking-wide text-slate-500">
                             Issued Date
                         </p>
                         <p class="font-medium text-slate-800">
@@ -75,22 +72,23 @@
 
                     {{-- BADGE --}}
                     <div class="flex flex-col items-center">
-                        <div class="h-14 w-14 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold">
+                        <div class="h-16 w-16 rounded-full bg-gradient-to-br from-indigo-600 to-sky-500 text-white flex items-center justify-center font-bold text-lg shadow-lg">
                             SB
                         </div>
-                        <p class="text-xs mt-2 text-slate-600 tracking-wide">
+                        <p class="text-xs mt-3 tracking-wide text-slate-500">
                             SkillBridge Certified
                         </p>
                     </div>
 
                     <div class="text-right">
-                        <p class="text-xs text-slate-500 uppercase tracking-wide">
+                        <p class="text-xs uppercase tracking-wide text-slate-500">
                             Authorized By
                         </p>
                         <p class="font-medium text-slate-800">
                             SkillBridge Platform
                         </p>
                     </div>
+
                 </div>
 
             </div>
