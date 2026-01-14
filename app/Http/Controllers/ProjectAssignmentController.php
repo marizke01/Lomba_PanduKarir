@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Certificate;
 use Illuminate\Support\Str;
 
-
 class ProjectAssignmentController extends Controller
 {
     // Ambil / mulai project
@@ -37,6 +36,21 @@ class ProjectAssignmentController extends Controller
     {
         $userId = Auth::id();
 
+        // 🔐 AMBIL DATA PROJECT + POLICY CHECK
+        $assignment = ProjectAssignment::firstOrCreate(
+            [
+                'user_id'      => $userId,
+                'project_slug' => $slug,
+            ],
+            [
+                'status' => 'in_progress',
+            ]
+        );
+
+        // POLICY CHECK (TETAP ADA)
+        $this->authorize('submit', $assignment);
+
+
         $validated = $request->validate([
             'submission_url' => ['required', 'url'],
             'notes'          => ['nullable', 'string'],
@@ -45,7 +59,7 @@ class ProjectAssignmentController extends Controller
             'submission_url.url'      => 'Format link tidak valid.',
         ]);
 
-        // 1️⃣ LOGIC LAMA (JANGAN DIUBAH)
+        // 1️⃣ LOGIC LAMA (TIDAK DIUBAH)
         ProjectAssignment::updateOrCreate(
             [
                 'user_id'      => $userId,
@@ -59,7 +73,7 @@ class ProjectAssignmentController extends Controller
             ]
         );
 
-        // 2️⃣ LOGIC BARU (AMAN): MASUK PORTOFOLIO
+        // 2️⃣ MASUK PORTOFOLIO
         ProjectSubmission::updateOrCreate(
             [
                 'user_id'      => $userId,
@@ -69,23 +83,22 @@ class ProjectAssignmentController extends Controller
                 'title'       => ucwords(str_replace('-', ' ', $slug)),
                 'description' => $validated['notes'] ?? null,
                 'result_url'  => $validated['submission_url'],
-                'status'      => 'approved', // auto masuk portofolio
+                'status'      => 'approved',
             ]
         );
 
-        // AUTO BUAT SERTIFIKAT
+        // 3️⃣ AUTO BUAT SERTIFIKAT
         Certificate::firstOrCreate(
             [
-                'user_id' => Auth::id(),
-                'project_slug' => $slug,
+                'user_id'      => $userId,
+                'project_slug'=> $slug,
             ],
             [
-                'project_title' => ucwords(str_replace('-', ' ', $slug)),
+                'project_title'      => ucwords(str_replace('-', ' ', $slug)),
                 'certificate_number' => 'SB-' . strtoupper(Str::random(8)),
-                'issued_at' => now(),
+                'issued_at'          => now(),
             ]
         );
-
 
         return redirect()
             ->route('portfolio.index')

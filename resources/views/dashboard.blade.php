@@ -66,12 +66,19 @@
                             </div>
                             <div>
                                 <p class="text-xs text-slate-500">Pelatihan diikuti</p>
-                                <p class="text-2xl font-semibold text-slate-900">0</p>
+                                <p class="text-2xl font-semibold text-slate-900">
+                                    {{ $completedCourses }}
+                                </p>
+
                             </div>
                         </div>
-                        <span class="text-[11px] px-2 py-1 rounded-full bg-indigo-50 text-indigo-700">
-                            Belum dimulai
+                    <p class="text-sm text-slate-500">
+                        Status: 
+                        <span class="font-semibold text-slate-800">
+                            {{ $trainingStatus }}
                         </span>
+                    </p>
+
                     </div>
                     <p class="text-xs text-slate-500">
                         Nanti di sini akan muncul jumlah pelatihan skill yang kamu ikuti.
@@ -91,12 +98,20 @@
                             </div>
                             <div>
                                 <p class="text-xs text-slate-500">Project Lab</p>
-                                <p class="text-2xl font-semibold text-slate-900">0</p>
+                                <p class="text-2xl font-semibold text-slate-900">
+                                {{ $totalProjects }}
+                            </p>
+
+
                             </div>
                         </div>
-                        <span class="text-[11px] px-2 py-1 rounded-full bg-emerald-50 text-emerald-700">
-                            Mulai
-                        </span>
+                        <p class="text-sm text-slate-500">
+                            Status: 
+                            <span class="font-semibold text-slate-800">
+                                {{ $projectStatus }}
+                            </span>
+                        </p>
+
                     </div>
                     <p class="text-xs text-slate-500">
                         Di sini nanti adalah jumlah proyek simulasi (mirip freelance) yang sudah kamu kerjakan.
@@ -148,7 +163,10 @@
                             </div>
                             <div>
                                 <p class="text-xs text-slate-500">Sertifikat</p>
-                                <p class="text-2xl font-semibold text-slate-900">0</p>
+                                <p class="text-2xl font-semibold text-slate-900">
+                                    {{ $certificateCount }}
+                                </p>
+
                             </div>
                         </div>
                         <span class="text-[11px] px-2 py-1 rounded-full bg-amber-50 text-amber-700">

@@ -12,7 +12,8 @@ use App\Http\Controllers\{
     ProjectLabController,
     ProjectAssignmentController,
     PortfolioController,
-    CertificateController
+    CertificateController,
+    DashboardController
 };
 
 use App\Models\{
@@ -31,40 +32,22 @@ Route::get('/', function () {
 
 /*
 |--------------------------------------------------------------------------
-| AUTH ONLY (TANPA VERIFIED)
+| AUTH ONLY
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth'])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | DASHBOARD (PAKAI LOGIC TEMANMU)
+    | Dashboard
     |--------------------------------------------------------------------------
     */
-    Route::get('/dashboard', function () {
-        $user = Auth::user();
-
-        $totalCourses = CourseProgress::where('user_id', $user->id)->count();
-        $completedCourses = CourseProgress::where('user_id', $user->id)
-            ->where('status', 'completed')
-            ->count();
-
-        $totalProjects = ProjectAssignment::where('user_id', $user->id)->count();
-        $submittedProjects = ProjectAssignment::where('user_id', $user->id)
-            ->where('status', 'submitted')
-            ->count();
-
-        return view('dashboard', compact(
-            'totalCourses',
-            'completedCourses',
-            'totalProjects',
-            'submittedProjects'
-        ));
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->name('dashboard');
 
     /*
     |--------------------------------------------------------------------------
-    | PROFILE
+    | Profile
     |--------------------------------------------------------------------------
     */
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -73,19 +56,19 @@ Route::middleware(['auth'])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | CV BUILDER (KODE KAMU)
+    | CV Builder
     |--------------------------------------------------------------------------
     */
-   Route::middleware(['auth'])->prefix('cv')->name('cv.')->group(function () {
-    Route::get('/', [CVController::class, 'index'])->name('index'); // Form builder
-    Route::post('/store', [CVController::class, 'store'])->name('store'); // Simpan data
-    Route::get('/preview', [CVController::class, 'preview'])->name('preview'); // Preview CV
-    Route::get('/download', [CVController::class, 'downloadPDF'])->name('download'); // Download PDF
-});
+    Route::prefix('cv')->name('cv.')->group(function () {
+        Route::get('/', [CVController::class, 'index'])->name('index');
+        Route::post('/store', [CVController::class, 'store'])->name('store');
+        Route::get('/preview', [CVController::class, 'preview'])->name('preview');
+        Route::get('/download', [CVController::class, 'downloadPDF'])->name('download');
+    });
 
     /*
     |--------------------------------------------------------------------------
-    | SKILLS (GABUNG)
+    | Skills
     |--------------------------------------------------------------------------
     */
     Route::prefix('skills')->name('skills.')->group(function () {
@@ -103,9 +86,11 @@ Route::middleware(['auth'])->group(function () {
             ->name('module.complete');
     });
 
-
-    // routes/web.php
-Route::middleware(['auth'])->group(function () {
+    /*
+    |--------------------------------------------------------------------------
+    | Certificates
+    |--------------------------------------------------------------------------
+    */
     Route::get('/certificates', [CertificateController::class, 'index'])
         ->name('certificates.index');
 
@@ -115,14 +100,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/certificates/{certificate}/download', [CertificateController::class, 'download'])
         ->name('certificates.download');
 
-    Route::get('/certificates/{id}/download', [CertificateController::class, 'download'])
-        ->name('certificates.download');
-});
-
-
     /*
     |--------------------------------------------------------------------------
-    | PROJECT LAB (INI YANG KAMU BUTUH)
+    | Project Lab
     |--------------------------------------------------------------------------
     */
     Route::get('/project-lab', [ProjectLabController::class, 'index'])
@@ -137,17 +117,21 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/project-lab/{slug}/submit', [ProjectAssignmentController::class, 'submit'])
         ->name('projectlab.submit');
 
+    /*
+    |--------------------------------------------------------------------------
+    | Portfolio
+    |--------------------------------------------------------------------------
+    */
     Route::get('/portfolio', [PortfolioController::class, 'index'])
         ->name('portfolio.index');
 
     Route::get('/portfolio/{id}', [PortfolioController::class, 'show'])
         ->name('portfolio.show');
-
 });
 
 /*
 |--------------------------------------------------------------------------
-| AUTH ROUTES
+| Auth Routes
 |--------------------------------------------------------------------------
 */
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
