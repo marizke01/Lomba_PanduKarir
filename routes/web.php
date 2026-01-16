@@ -16,6 +16,9 @@ use App\Http\Controllers\{
     DashboardController
 };
 
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+
+
 use App\Models\{
     CourseProgress,
     ProjectAssignment
@@ -29,6 +32,11 @@ use App\Models\{
 Route::get('/', function () {
     return view('landing');
 })->name('landing');
+
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])
+        ->name('admin.dashboard');
+});
 
 /*
 |--------------------------------------------------------------------------
