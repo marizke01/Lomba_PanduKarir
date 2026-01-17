@@ -1,4 +1,8 @@
-PanduKarir – CI/CD Project Documentation
+# SkillBridge – CI/CD Project Documentation
+# Kelompok Taring Keberuntungan
+- Marizke Mega Utami (Ketua) - 2310120023
+- Andi Nur Akifah - 2310120003
+- Alifa Nur Azizah - 2310120002
 
 ## Deskripsi Proyek
 
@@ -53,56 +57,30 @@ Workflow GitHub Actions berada pada folder:
 
 Workflow ini memastikan bahwa **kode yang dideploy selalu dalam kondisi valid**.
 
----
+### 4. Alur singkat pipeline:
 
-## Branching Strategy
+Developer Push Code
+        ↓
+GitHub Repository
+        ↓
+GitHub Actions Trigger
+        ↓
+Continuous Integration (Build & Test)
+        ↓
+Continuous Deployment
+        ↓
+Staging / Production Server
 
-### Branch Utama
-* `main`  
-  → Branch production (kode stabil dan siap rilis)
+### 5. Cara Menjalankan Proyek Secara Lokal
 
-### Branch Pendukung
-* `develop/*`  
-  Berisi kode pengembangan aktif sebelum dirilis ke production
-* `feature/*`  
-  Digunakan untuk pengembangan fitur baru
-* `hotfix/*`  
-  Digunakan untuk perbaikan bug kritis pada lingkungan production
+1. Clone repository: git clone https://github.com/marizke01/Lomba_PanduKarir.git
 
-**Aturan utama:**
-* Tidak melakukan commit langsung ke `main`
-* Semua perubahan harus melalui Pull Request
-* Pull Request harus lulus CI sebelum merge
+2. Install dependencies: composer install
 
----
+3. Copy file environment: cp .env.example .env
 
-## Cara Kerja Deployment Staging & Production
+4. Generate application key: php artisan key:generate
 
-### Deployment Staging
-* Trigger: `push` ke branch `development`
-* Tujuan:
-  * Testing fitur
-  * Validasi integrasi
-* Environment: Staging server
+5. Jalankan migrasi database: php artisan migrate
 
-### Deployment Production
-* Trigger: `merge` ke branch `main`
-* Tujuan:
-  * Rilis aplikasi ke pengguna
-* Environment: Production server
-
-Deployment dilakukan secara otomatis oleh GitHub Actions untuk menghindari human error.
-
----
-
-## Mekanisme Rollback
-
-1. **Rollback via Git**
-   * Kembali ke commit stabil sebelumnya
-   * Re-deploy otomatis melalui pipeline
-
-2. **Rollback Manual**
-   * Menggunakan backup versi sebelumnya di server
-   * Digunakan jika deployment otomatis gagal
-
-Rollback memastikan aplikasi tetap stabil dan meminimalkan downtime.
+6. Jalankan server: php artisan serve

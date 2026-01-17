@@ -60,7 +60,7 @@
 
             {{-- QUICK ACTIONS --}}
             <div class="grid md:grid-cols-2 gap-4">
-                <a href="#"
+                <a href="{{ route('admin.skills.index') }}"
                    class="bg-white rounded-2xl shadow-sm p-5 hover:bg-slate-50">
                     <h3 class="font-semibold text-slate-800">Kelola Skill</h3>
                     <p class="text-xs text-slate-500">
