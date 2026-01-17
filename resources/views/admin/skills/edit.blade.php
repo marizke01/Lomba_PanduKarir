@@ -1,6 +1,23 @@
 <x-app-layout>
     <h1 class="text-lg font-semibold mb-4">Edit Skill</h1>
 
+    @if (session('success'))
+        <div class="p-3 rounded bg-emerald-50 text-emerald-700 text-sm">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if ($errors->any())
+        <div class="p-3 rounded bg-red-50 text-red-700 text-sm">
+            <ul class="list-disc list-inside">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+
     <form method="POST" action="{{ route('admin.skills.update', $skill) }}" class="space-y-4">
         @csrf
         @method('PUT')

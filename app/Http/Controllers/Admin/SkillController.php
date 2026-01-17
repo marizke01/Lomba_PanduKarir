@@ -67,24 +67,41 @@ class SkillController extends Controller
 
     public function update(Request $request, Skill $skill)
     {
-        $request->validate([
+        $data = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'category' => 'required|string',
             'level' => 'required|string',
-            'thumbnail' => 'nullable|url',
+            'thumbnail' => 'nullable|string',
             'intro_youtube_id' => 'nullable|string',
-            'is_active' => 'nullable|boolean',
+            'duration' => 'nullable|string',
+            'modules' => 'nullable|array',
+            'modules.*.title' => 'required|string',
+            'modules.*.youtube_id' => 'nullable|string',
+            'modules.*.duration' => 'nullable|string',
+            'modules.*.task' => 'nullable|string',
+            'modules.*.points' => 'nullable|string',
+            'is_active' => 'sometimes',
         ]);
 
+        if (!empty($data['modules'])) {
+            $data['modules'] = collect($data['modules'])->map(function ($m) {
+                return [
+                    'title' => $m['title'],
+                    'type' => 'video',
+                    'youtube_id' => $m['youtube_id'] ?? null,
+                    'duration' => $m['duration'] ?? null,
+                    'task' => $m['task'] ?? null,
+                    'points' => isset($m['points'])
+                        ? array_filter(array_map('trim', explode("\n", $m['points'])))
+                        : [],
+                ];
+            })->values()->toArray();
+        }
+
         $skill->update([
-            'title' => $request->title,
-            'slug' => Str::slug($request->title),
-            'description' => $request->description,
-            'category' => $request->category,
-            'level' => $request->level,
-            'thumbnail' => $request->thumbnail,
-            'intro_youtube_id' => $request->intro_youtube_id,
+            ...$data,
+            'slug' => Str::slug($data['title']),
             'is_active' => $request->has('is_active'),
         ]);
 
