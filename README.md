@@ -5,11 +5,11 @@
 - Alifa Nur Azizah - 2310120002
 
 ## link deploy (Railway)
-production(skill-bridge.up.railway.app)
-staging(skill-bridge-staging.up.railway.app)
+- production(skill-bridge.up.railway.app)
+- staging(skill-bridge-staging.up.railway.app)
 
 ## link youtube
-https://youtu.be/EWdRouyLaio?si=8gUdUaOXdh8z0AFW
+https://youtu.be/vNOtiCa4cG4?si=KH2LzbkSN-whFYAa
 
 
 ## Deskripsi Proyek
