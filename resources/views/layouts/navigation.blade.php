@@ -14,8 +14,8 @@
             <!-- LEFT: BACK (conditional) + LOGO -->
             <div class="flex items-center gap-2">
 
-                {{-- BACK BUTTON (HANYA MUNCUL SELAIN DASHBOARD) --}}
-                @if (!request()->routeIs('dashboard'))
+                {{-- BACK BUTTON (HANYA MUNCUL SELAIN DASHBOARD DAN ADMIN DASHBOARD) --}}
+                @if (!request()->routeIs('dashboard') && !request()->routeIs('admin.dashboard'))
                     <button
                         onclick="window.history.back()"
                         class="inline-flex items-center justify-center
@@ -36,7 +36,7 @@
                 @endif
 
                 {{-- LOGO --}}
-                <a href="{{ route('dashboard') }}"
+                <a href="{{ auth()->check() && auth()->user()->role === 'admin' ? route('admin.dashboard') : route('dashboard') }}"
                    class="flex items-center gap-2 font-semibold tracking-wide">
                     <span class="inline-flex h-9 w-9 items-center justify-center
                                  rounded-xl bg-white text-indigo-600
