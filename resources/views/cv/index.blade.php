@@ -9,10 +9,25 @@
             <p class="text-sm text-gray-500">
                 Lengkapi data berikut untuk membangun CV profesional.
             </p>
+            @if($cv)
+                <a href="{{ route('cv.preview') }}"
+                   class="inline-flex mt-3 items-center px-4 py-2 text-xs font-medium bg-indigo-600 text-white rounded-xl shadow hover:bg-indigo-700">
+                    Lihat CV Saya
+                    <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-width="2" d="M5 12h14m-7-6 6 6-6 6"/>
+                    </svg>
+                </a>
+            @endif
+
+            @if(session('success'))
+                <div class="mb-4 text-sm text-emerald-700 bg-emerald-50 border border-emerald-200 px-4 py-2 rounded-xl shadow">
+                    {{ session('success') }}
+                </div>
+            @endif
         </div>
 
         <!-- FORM -->
-        <form method="POST" action="#" enctype="multipart/form-data" class="space-y-6">
+        <form method="POST" action="{{ route('cv.store') }}" enctype="multipart/form-data" class="space-y-6">
             @csrf
 
             <!-- INFORMASI PRIBADI -->

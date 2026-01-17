@@ -14,7 +14,7 @@ class CVController extends Controller
     public function index()
     {
         $cv = CV::where('user_id', auth()->id())->first();
-        return view('cv.builder', compact('cv'));
+        return view('cv.index', compact('cv'));
     }
 
     /**
@@ -77,7 +77,7 @@ class CVController extends Controller
             return redirect()->route('cv.index')->with('error', 'Silakan lengkapi data CV terlebih dahulu.');
         }
 
-        return view('cv.preview', compact('cv'));
+        return view('cv.show', compact('cv'));
     }
 
     /**
