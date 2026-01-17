@@ -13,6 +13,9 @@ class CVController extends Controller
 
 public function downloadPDF()
 {
+    ini_set('max_execution_time', '180');
+    set_time_limit(180);
+
     $cv = CV::where('user_id', auth()->id())->first();
 
     if (!$cv) {
@@ -28,6 +31,8 @@ public function downloadPDF()
     Browsershot::html($html)
     ->setChromePath('/usr/bin/chromium')
     ->setOption('args', ['--no-sandbox'])
+    ->timeout(180)
+    ->setOption('protocolTimeout', 180000)
     ->emulateMedia('screen')
     ->showBackground()
     ->format('A4')
