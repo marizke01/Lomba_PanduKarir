@@ -84,10 +84,11 @@ Route::middleware(['auth'])->group(function () {
     | CV Builder
     |--------------------------------------------------------------------------
     */
-    Route::prefix('cv')->name('cv.')->group(function () {
+    Route::prefix('cv')->name('cv.')->middleware('auth')->group(function () {
         Route::get('/', [CVController::class, 'index'])->name('index');
         Route::post('/store', [CVController::class, 'store'])->name('store');
-        Route::get('/preview', [CVController::class, 'preview'])->name('preview');
+
+        Route::get('/view', [CVController::class, 'show'])->name('view');
         Route::get('/download', [CVController::class, 'downloadPDF'])->name('download');
     });
 
