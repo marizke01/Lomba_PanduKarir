@@ -19,9 +19,14 @@
             {{-- NAVBAR --}}
             @if (request()->routeIs('landing'))
                 @include('layouts.navlanding')
+
+            @elseif (auth()->check() && auth()->user()->role === 'admin')
+                @include('layouts.navadmin')
+
             @else
                 @include('layouts.navigation')
             @endif
+
 
 
             <!-- Page Heading -->

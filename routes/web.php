@@ -38,6 +38,23 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
         ->name('admin.dashboard');
 });
 
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('skills', \App\Http\Controllers\Admin\SkillController::class);
+});
+
+
+Route::middleware(['auth', 'admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::resource(
+            'skills',
+            \App\Http\Controllers\Admin\SkillController::class
+        );
+    });
+
+
+
 /*
 |--------------------------------------------------------------------------
 | AUTH ONLY (TANPA VERIFIED)
