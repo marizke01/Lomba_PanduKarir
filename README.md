@@ -4,7 +4,16 @@
 - Andi Nur Akifah - 2310120003
 - Alifa Nur Azizah - 2310120002
 
+## link deploy (Railway)
+production(skill-bridge.up.railway.app)
+staging(skill-bridge-staging.up.railway.app)
+
+## link youtube
+https://youtu.be/EWdRouyLaio?si=8gUdUaOXdh8z0AFW
+
+
 ## Deskripsi Proyek
+
 
 **PanduKarir** adalah aplikasi berbasis web yang dikembangkan menggunakan **Laravel** untuk membantu pengguna dalam pengelolaan dan pengembangan karier.
 Proyek ini menerapkan **CI/CD (Continuous Integration & Continuous Deployment)** menggunakan **GitHub Actions** untuk memastikan proses build, testing, dan deployment berjalan otomatis, konsisten, dan terkontrol.
