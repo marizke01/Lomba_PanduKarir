@@ -26,6 +26,7 @@ public function downloadPDF()
 
     // Generate PDF 100% sama dengan show.blade
     Browsershot::html($html)
+    ->setChromePath('/usr/bin/chromium')
     ->setOption('args', ['--no-sandbox'])
     ->emulateMedia('screen')
     ->showBackground()
