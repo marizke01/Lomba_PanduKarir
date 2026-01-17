@@ -1,4 +1,8 @@
-# PanduKarir – CI/CD Project Documentation
+# SkillBridge – CI/CD Project Documentation
+# Kelompok Taring Keberuntungan
+- Marizke Mega Utami (Ketua) - 2310120023
+- Andi Nur Akifah - 2310120003
+- Alifa Nur Azizah - 2310120002
 
 ## Deskripsi Proyek
 PanduKarir adalah aplikasi berbasis web yang dikembangkan menggunakan Laravel untuk membantu pengguna dalam pengelolaan dan pengembangan karier. Proyek ini menerapkan CI/CD (Continuous Integration & Continuous Deployment) menggunakan GitHub Actions untuk memastikan proses build, testing, dan deployment berjalan otomatis, konsisten, dan terkontrol.
@@ -27,4 +31,30 @@ Deployment ke:
 
 Deployment hanya dilakukan jika proses CI berhasil.
 
-Alur singkat pipeline:
+### 4. Alur singkat pipeline:
+
+Developer Push Code
+        ↓
+GitHub Repository
+        ↓
+GitHub Actions Trigger
+        ↓
+Continuous Integration (Build & Test)
+        ↓
+Continuous Deployment
+        ↓
+Staging / Production Server
+
+### 5. Cara Menjalankan Proyek Secara Lokal
+
+1. Clone repository: git clone https://github.com/marizke01/Lomba_PanduKarir.git
+
+2. Install dependencies: composer install
+
+3. Copy file environment: cp .env.example .env
+
+4. Generate application key: php artisan key:generate
+
+5. Jalankan migrasi database: php artisan migrate
+
+6. Jalankan server: php artisan serve
